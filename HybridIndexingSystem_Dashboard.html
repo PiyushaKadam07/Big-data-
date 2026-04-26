@@ -1,0 +1,1172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hybrid Indexing System — CS63016</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=DM+Sans:wght@300;400;500;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #070b14;
+  --surface: #0e1624;
+  --surface2: #152035;
+  --border: #1e3050;
+  --accent: #00d4ff;
+  --accent2: #ff6b35;
+  --accent3: #7c3aed;
+  --green: #10b981;
+  --yellow: #f59e0b;
+  --red: #ef4444;
+  --text: #e2e8f0;
+  --muted: #64748b;
+  --mono: 'Space Mono', monospace;
+  --sans: 'DM Sans', sans-serif;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--sans);
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* Background grid */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(0,212,255,0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0,212,255,0.04) 1px, transparent 1px);
+  background-size: 40px 40px;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.container { position: relative; z-index: 1; max-width: 1200px; margin: 0 auto; padding: 0 24px; }
+
+/* Header */
+header {
+  border-bottom: 1px solid var(--border);
+  padding: 20px 0;
+  background: linear-gradient(180deg, rgba(0,212,255,0.06) 0%, transparent 100%);
+}
+.header-inner {
+  display: flex; align-items: center; justify-content: space-between;
+  flex-wrap: wrap; gap: 12px;
+}
+.logo {
+  display: flex; flex-direction: column;
+}
+.logo-title {
+  font-family: var(--mono);
+  font-size: 18px;
+  color: var(--accent);
+  letter-spacing: 0.05em;
+}
+.logo-sub {
+  font-size: 12px;
+  color: var(--muted);
+  margin-top: 2px;
+}
+.badge {
+  font-family: var(--mono);
+  font-size: 11px;
+  padding: 4px 12px;
+  border-radius: 20px;
+  border: 1px solid;
+}
+.badge-blue { border-color: var(--accent); color: var(--accent); background: rgba(0,212,255,0.08); }
+.badge-orange { border-color: var(--accent2); color: var(--accent2); background: rgba(255,107,53,0.08); }
+
+/* Main layout */
+main { padding: 32px 0 60px; }
+
+/* Section headers */
+.section-title {
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.15em;
+  color: var(--muted);
+  text-transform: uppercase;
+  margin-bottom: 16px;
+  display: flex; align-items: center; gap: 8px;
+}
+.section-title::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: var(--border);
+}
+
+/* Cards */
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 20px;
+  transition: border-color 0.2s;
+}
+.card:hover { border-color: rgba(0,212,255,0.3); }
+
+/* Architecture diagram */
+.arch-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin-bottom: 32px;
+}
+@media (max-width: 700px) { .arch-grid { grid-template-columns: 1fr; } }
+
+.arch-diagram {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+
+.layer {
+  width: 100%;
+  border-radius: 8px;
+  padding: 12px 16px;
+  text-align: center;
+  font-size: 13px;
+  font-weight: 500;
+  position: relative;
+}
+.layer-client {
+  background: rgba(124,58,237,0.15);
+  border: 1px solid rgba(124,58,237,0.4);
+  color: #a78bfa;
+}
+.layer-meta {
+  background: rgba(0,212,255,0.1);
+  border: 1px solid rgba(0,212,255,0.4);
+  color: var(--accent);
+}
+.layer-dist {
+  background: rgba(16,185,129,0.1);
+  border: 1px solid rgba(16,185,129,0.4);
+  color: var(--green);
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+  flex-wrap: wrap;
+  padding: 16px;
+}
+.layer-node {
+  background: rgba(16,185,129,0.15);
+  border: 1px solid rgba(16,185,129,0.3);
+  border-radius: 6px;
+  padding: 6px 12px;
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--green);
+}
+.arrow {
+  color: var(--muted);
+  font-size: 18px;
+  line-height: 1;
+}
+.layer-label {
+  font-family: var(--mono);
+  font-size: 10px;
+  color: var(--muted);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  margin-bottom: 4px;
+}
+
+/* Controls */
+.controls {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 24px;
+  margin-bottom: 24px;
+}
+
+.control-row {
+  display: flex;
+  gap: 12px;
+  align-items: flex-end;
+  flex-wrap: wrap;
+}
+
+.input-group {
+  flex: 1;
+  min-width: 200px;
+}
+.input-group label {
+  display: block;
+  font-size: 12px;
+  color: var(--muted);
+  font-family: var(--mono);
+  margin-bottom: 6px;
+  letter-spacing: 0.05em;
+}
+.input-group input, .input-group select {
+  width: 100%;
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  color: var(--text);
+  font-family: var(--sans);
+  font-size: 14px;
+  padding: 10px 14px;
+  outline: none;
+  transition: border-color 0.2s;
+}
+.input-group input:focus, .input-group select:focus {
+  border-color: var(--accent);
+}
+
+.btn {
+  padding: 10px 24px;
+  border-radius: 8px;
+  border: none;
+  font-family: var(--mono);
+  font-size: 13px;
+  cursor: pointer;
+  transition: all 0.2s;
+  letter-spacing: 0.05em;
+}
+.btn-primary {
+  background: var(--accent);
+  color: #000;
+  font-weight: 700;
+}
+.btn-primary:hover { background: #33dcff; transform: translateY(-1px); }
+.btn-secondary {
+  background: transparent;
+  color: var(--accent2);
+  border: 1px solid var(--accent2);
+}
+.btn-secondary:hover { background: rgba(255,107,53,0.1); }
+
+/* Mode buttons */
+.mode-group {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-top: 16px;
+}
+.mode-btn {
+  padding: 8px 20px;
+  border-radius: 6px;
+  border: 1px solid var(--border);
+  background: transparent;
+  color: var(--muted);
+  font-family: var(--mono);
+  font-size: 12px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.mode-btn:hover { border-color: var(--accent); color: var(--accent); }
+.mode-btn.active-hybrid { border-color: var(--accent); color: var(--accent); background: rgba(0,212,255,0.08); }
+.mode-btn.active-distributed { border-color: var(--accent2); color: var(--accent2); background: rgba(255,107,53,0.08); }
+.mode-btn.active-centralized { border-color: var(--accent3); color: #a78bfa; background: rgba(124,58,237,0.08); }
+.mode-btn.active-all { border-color: var(--green); color: var(--green); background: rgba(16,185,129,0.08); }
+
+/* Results */
+.results-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+@media (max-width: 700px) { .results-grid { grid-template-columns: 1fr; } }
+
+/* Comparison table */
+.compare-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+  margin-bottom: 24px;
+}
+.compare-table th {
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  color: var(--muted);
+  text-align: left;
+  padding: 10px 16px;
+  border-bottom: 1px solid var(--border);
+}
+.compare-table td {
+  padding: 12px 16px;
+  border-bottom: 1px solid rgba(30,48,80,0.5);
+}
+.compare-table tr:last-child td { border-bottom: none; }
+.compare-table tr:hover td { background: rgba(255,255,255,0.02); }
+
+/* Stat cards */
+.stat-row {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+  margin-bottom: 24px;
+}
+@media (max-width: 700px) { .stat-row { grid-template-columns: 1fr 1fr; } }
+
+.stat-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 16px;
+}
+.stat-value {
+  font-family: var(--mono);
+  font-size: 24px;
+  font-weight: 700;
+  margin-bottom: 4px;
+}
+.stat-label {
+  font-size: 12px;
+  color: var(--muted);
+}
+.color-accent { color: var(--accent); }
+.color-orange { color: var(--accent2); }
+.color-green { color: var(--green); }
+.color-yellow { color: var(--yellow); }
+
+/* Node visualizer */
+.node-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+  margin-bottom: 24px;
+}
+@media (max-width: 700px) { .node-grid { grid-template-columns: 1fr 1fr; } }
+
+.node-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 16px;
+  transition: all 0.3s;
+}
+.node-card.active {
+  border-color: var(--green);
+  background: rgba(16,185,129,0.06);
+  box-shadow: 0 0 20px rgba(16,185,129,0.1);
+}
+.node-card.queried {
+  border-color: var(--accent);
+  animation: pulse 0.6s ease-out;
+}
+@keyframes pulse {
+  0% { box-shadow: 0 0 0 0 rgba(0,212,255,0.6); }
+  100% { box-shadow: 0 0 0 20px rgba(0,212,255,0); }
+}
+.node-id {
+  font-family: var(--mono);
+  font-size: 12px;
+  color: var(--accent);
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.node-dot {
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: var(--green);
+  box-shadow: 0 0 6px var(--green);
+}
+.node-dot.inactive { background: var(--muted); box-shadow: none; }
+.bar-wrap { margin-bottom: 6px; }
+.bar-label {
+  display: flex;
+  justify-content: space-between;
+  font-size: 11px;
+  color: var(--muted);
+  margin-bottom: 3px;
+}
+.bar {
+  height: 4px;
+  background: var(--surface2);
+  border-radius: 2px;
+  overflow: hidden;
+}
+.bar-fill {
+  height: 100%;
+  border-radius: 2px;
+  transition: width 0.5s ease;
+}
+.bar-fill-blue { background: linear-gradient(90deg, var(--accent), #0099bb); }
+.bar-fill-green { background: linear-gradient(90deg, var(--green), #059669); }
+
+/* Log */
+.log {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 16px;
+  font-family: var(--mono);
+  font-size: 12px;
+  max-height: 240px;
+  overflow-y: auto;
+  margin-bottom: 24px;
+}
+.log-entry {
+  padding: 4px 0;
+  border-bottom: 1px solid rgba(30,48,80,0.4);
+  display: flex;
+  gap: 12px;
+}
+.log-time { color: var(--muted); flex-shrink: 0; }
+.log-mode-hybrid { color: var(--accent); }
+.log-mode-distributed { color: var(--accent2); }
+.log-mode-centralized { color: #a78bfa; }
+.log-msg { color: var(--text); }
+
+/* Chart */
+.chart-wrap {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 24px;
+  margin-bottom: 24px;
+}
+canvas { display: block; max-height: 280px; }
+
+/* Result items */
+.result-item {
+  background: var(--surface2);
+  border-radius: 6px;
+  padding: 10px 12px;
+  margin-bottom: 6px;
+  font-size: 12px;
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+}
+.result-id {
+  font-family: var(--mono);
+  color: var(--accent);
+  flex-shrink: 0;
+  font-size: 11px;
+  margin-top: 1px;
+}
+.result-node {
+  font-family: var(--mono);
+  font-size: 10px;
+  color: var(--muted);
+  margin-top: 2px;
+}
+.score-bar {
+  height: 3px;
+  background: var(--surface);
+  border-radius: 2px;
+  margin-top: 4px;
+  overflow: hidden;
+}
+.score-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--green), var(--accent));
+  border-radius: 2px;
+}
+
+.empty-state {
+  text-align: center;
+  padding: 40px;
+  color: var(--muted);
+  font-size: 13px;
+  font-family: var(--mono);
+}
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: var(--surface); }
+::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: var(--muted); }
+
+.tag {
+  display: inline-block;
+  font-family: var(--mono);
+  font-size: 10px;
+  padding: 2px 8px;
+  border-radius: 10px;
+  border: 1px solid;
+}
+.tag-hybrid { border-color: var(--accent); color: var(--accent); }
+.tag-distributed { border-color: var(--accent2); color: var(--accent2); }
+.tag-centralized { border-color: #a78bfa; color: #a78bfa; }
+
+.speed-badge {
+  font-family: var(--mono);
+  font-size: 12px;
+  font-weight: 700;
+}
+.speed-fast { color: var(--green); }
+.speed-slow { color: var(--red); }
+.speed-mid { color: var(--yellow); }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="container">
+    <div class="header-inner">
+      <div class="logo">
+        <div class="logo-title">⬡ HYBRID INDEXING SYSTEM</div>
+        <div class="logo-sub">Centralized vs Distributed vs Hybrid · CS63016 · Kent State University</div>
+      </div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;">
+        <span class="badge badge-blue">Shahbaz Shaikh</span>
+        <span class="badge badge-orange">Piyusha Kadam</span>
+        <span class="badge badge-blue">M. Rameez Usman</span>
+      </div>
+    </div>
+  </div>
+</header>
+
+<main>
+<div class="container">
+
+  <!-- Architecture Overview -->
+  <div class="section-title">System Architecture</div>
+  <div class="arch-grid">
+    <div class="arch-diagram">
+      <div class="layer-label">Hybrid Architecture (Proposed)</div>
+      <div class="layer layer-client">🖥️ Client / Query Interface</div>
+      <div class="arrow">↓ route query</div>
+      <div class="layer layer-meta">📋 Central Metadata Index<br><small style="opacity:0.7">term→nodes · doc→node · node summaries</small></div>
+      <div class="arrow">↓ targeted routing</div>
+      <div class="layer layer-dist">
+        <div class="layer-node">node_0</div>
+        <div class="layer-node">node_1</div>
+        <div class="layer-node">node_2</div>
+        <div class="layer-node">node_3</div>
+      </div>
+    </div>
+    <div class="card" style="display:flex;flex-direction:column;gap:16px;">
+      <div>
+        <div class="layer-label" style="margin-bottom:8px;">Core Innovation</div>
+        <p style="font-size:13px;color:var(--muted);line-height:1.7;">Instead of fully centralizing or fully distributing the index, this system uses a <span style="color:var(--accent)">lightweight metadata layer</span> to route queries only to <em>relevant</em> nodes — eliminating unnecessary broadcasts while maintaining distributed scalability.</p>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+        <div style="background:var(--surface2);border-radius:8px;padding:12px;">
+          <div style="font-family:var(--mono);font-size:10px;color:var(--muted);margin-bottom:6px;">CENTRALIZED</div>
+          <div style="font-size:12px;color:#ef4444;">✗ Single point of failure</div>
+          <div style="font-size:12px;color:#ef4444;">✗ Bottleneck at scale</div>
+          <div style="font-size:12px;color:var(--green);">✓ Simple management</div>
+        </div>
+        <div style="background:var(--surface2);border-radius:8px;padding:12px;">
+          <div style="font-family:var(--mono);font-size:10px;color:var(--muted);margin-bottom:6px;">DISTRIBUTED</div>
+          <div style="font-size:12px;color:var(--green);">✓ Scalable</div>
+          <div style="font-size:12px;color:#ef4444;">✗ Broadcast overhead</div>
+          <div style="font-size:12px;color:#ef4444;">✗ Complex routing</div>
+        </div>
+        <div style="background:rgba(0,212,255,0.06);border:1px solid rgba(0,212,255,0.2);border-radius:8px;padding:12px;grid-column:span 2;">
+          <div style="font-family:var(--mono);font-size:10px;color:var(--accent);margin-bottom:6px;">HYBRID (PROPOSED)</div>
+          <div style="font-size:12px;color:var(--green);">✓ Metadata-driven routing</div>
+          <div style="font-size:12px;color:var(--green);">✓ Reduced communication cost</div>
+          <div style="font-size:12px;color:var(--green);">✓ Parallel + targeted execution</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Controls -->
+  <div class="section-title">Query Interface</div>
+  <div class="controls">
+    <div class="control-row">
+      <div class="input-group" style="flex:2;">
+        <label>Search Query</label>
+        <input type="text" id="queryInput" placeholder="e.g. distributed indexing nodes, search engines, NoSQL databases..." value="distributed indexing nodes">
+      </div>
+      <div class="input-group">
+        <label>Number of Nodes</label>
+        <select id="nodeCount">
+          <option value="2">2 Nodes</option>
+          <option value="4" selected>4 Nodes</option>
+          <option value="6">6 Nodes</option>
+          <option value="8">8 Nodes</option>
+        </select>
+      </div>
+      <div class="input-group">
+        <label>Partitioning</label>
+        <select id="partitionStrategy">
+          <option value="hash">Hash-based</option>
+          <option value="range">Range-based</option>
+        </select>
+      </div>
+    </div>
+    <div class="mode-group">
+      <div style="font-family:var(--mono);font-size:11px;color:var(--muted);align-self:center;margin-right:4px;">RUN MODE:</div>
+      <button class="mode-btn" onclick="runQuery('hybrid')">⬡ Hybrid</button>
+      <button class="mode-btn" onclick="runQuery('distributed')">◈ Distributed</button>
+      <button class="mode-btn" onclick="runQuery('centralized')">◎ Centralized</button>
+      <button class="mode-btn" onclick="runQuery('all')" style="margin-left:8px;">▶ Compare All</button>
+      <button class="btn btn-secondary" onclick="resetSystem()" style="margin-left:auto;">↺ Reset</button>
+    </div>
+  </div>
+
+  <!-- Live Stats -->
+  <div class="section-title">Live System Metrics</div>
+  <div class="stat-row">
+    <div class="stat-card">
+      <div class="stat-value color-accent" id="stat-docs">20</div>
+      <div class="stat-label">Documents Indexed</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-value color-green" id="stat-nodes">4</div>
+      <div class="stat-label">Active Nodes</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-value color-orange" id="stat-queries">0</div>
+      <div class="stat-label">Queries Executed</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-value color-yellow" id="stat-savings">—</div>
+      <div class="stat-label">Avg Node Savings (Hybrid)</div>
+    </div>
+  </div>
+
+  <!-- Node Visualizer -->
+  <div class="section-title">Distributed Node Status</div>
+  <div class="node-grid" id="nodeGrid"></div>
+
+  <!-- Results -->
+  <div class="section-title">Query Results</div>
+  <div class="results-grid">
+    <div class="card">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">
+        <span class="tag tag-hybrid">⬡ HYBRID</span>
+        <span class="speed-badge" id="hybrid-latency">—</span>
+      </div>
+      <div id="hybrid-results"><div class="empty-state">Run a query to see results</div></div>
+    </div>
+    <div class="card">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">
+        <span class="tag tag-distributed">◈ DISTRIBUTED</span>
+        <span class="speed-badge" id="dist-latency">—</span>
+      </div>
+      <div id="dist-results"><div class="empty-state">Run a query to see results</div></div>
+    </div>
+  </div>
+  <div class="card" style="margin-bottom:24px;">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">
+      <span class="tag tag-centralized">◎ CENTRALIZED</span>
+      <span class="speed-badge" id="cent-latency">—</span>
+    </div>
+    <div id="cent-results"><div class="empty-state">Run a query to see results</div></div>
+  </div>
+
+  <!-- Comparison Table -->
+  <div class="section-title">Performance Comparison</div>
+  <div class="card" style="margin-bottom:24px;overflow-x:auto;">
+    <table class="compare-table">
+      <thead>
+        <tr>
+          <th>Mode</th>
+          <th>Nodes Queried</th>
+          <th>Avg Latency</th>
+          <th>Results Found</th>
+          <th>Comm. Overhead</th>
+          <th>Efficiency</th>
+        </tr>
+      </thead>
+      <tbody id="compareBody">
+        <tr><td colspan="6" style="text-align:center;color:var(--muted);padding:20px;font-family:var(--mono);font-size:12px;">No queries run yet</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Chart -->
+  <div class="section-title">Latency Trend</div>
+  <div class="chart-wrap">
+    <canvas id="latencyChart"></canvas>
+  </div>
+
+  <!-- Log -->
+  <div class="section-title">System Log</div>
+  <div class="log" id="systemLog">
+    <div class="log-entry">
+      <span class="log-time">00:00:00</span>
+      <span class="log-msg">System initialized. 20 documents indexed across 4 nodes using hash-based partitioning.</span>
+    </div>
+  </div>
+
+</div>
+</main>
+
+<script>
+// ─── Core Indexing System (JS port) ───────────────────────────────────────────
+
+const STOPWORDS = new Set(["a","an","the","is","in","of","and","or","to","for","with","on","at"]);
+
+function tokenize(text) {
+  return text.toLowerCase().split(/\s+/).filter(w => /^[a-z]+$/.test(w) && !STOPWORDS.has(w));
+}
+
+function md5hash(str) {
+  // Simple djb2 hash for partitioning
+  let h = 5381;
+  for (let i = 0; i < str.length; i++) h = ((h << 5) + h) + str.charCodeAt(i);
+  return Math.abs(h);
+}
+
+const SAMPLE_DOCS = [
+  {id:"doc_000", content:"search engines use distributed inverted indexes for efficient keyword retrieval", cat:"search"},
+  {id:"doc_001", content:"NoSQL databases handle large scale data with partitioned storage", cat:"database"},
+  {id:"doc_002", content:"Apache Spark enables distributed processing of big data workloads", cat:"processing"},
+  {id:"doc_003", content:"consistent hashing distributes load evenly across cluster nodes", cat:"systems"},
+  {id:"doc_004", content:"inverted index maps terms to document identifiers for fast search", cat:"search"},
+  {id:"doc_005", content:"Elasticsearch provides distributed full text search with sharding", cat:"search"},
+  {id:"doc_006", content:"B-Tree indexes are common in centralized relational databases", cat:"database"},
+  {id:"doc_007", content:"query routing reduces network overhead in distributed index systems", cat:"systems"},
+  {id:"doc_008", content:"metadata layer stores node summaries and partition mappings", cat:"systems"},
+  {id:"doc_009", content:"IoT devices generate high velocity data streams requiring real time indexing", cat:"iot"},
+  {id:"doc_010", content:"recommendation systems need fast lookup of user and item features", cat:"ml"},
+  {id:"doc_011", content:"AdTech platforms use real time indexing for contextual targeting", cat:"adtech"},
+  {id:"doc_012", content:"distributed hash tables provide scalable key value lookups", cat:"systems"},
+  {id:"doc_013", content:"Apache Cassandra uses consistent hashing for partitioned indexing", cat:"database"},
+  {id:"doc_014", content:"Google Bigtable offers distributed storage with row key indexing", cat:"database"},
+  {id:"doc_015", content:"range partitioning splits data by key range across nodes", cat:"systems"},
+  {id:"doc_016", content:"load balancing ensures even distribution across index nodes", cat:"systems"},
+  {id:"doc_017", content:"parallel query execution improves throughput in distributed systems", cat:"processing"},
+  {id:"doc_018", content:"fault tolerance requires replication of index partitions", cat:"systems"},
+  {id:"doc_019", content:"social media platforms index billions of posts for fast retrieval", cat:"search"},
+];
+
+class IndexNode {
+  constructor(id) {
+    this.id = id;
+    this.invertedIndex = {};  // term -> [docIds]
+    this.documents = {};
+    this.queryCount = 0;
+  }
+  addDoc(doc) {
+    this.documents[doc.id] = doc;
+    for (const term of tokenize(doc.content)) {
+      if (!this.invertedIndex[term]) this.invertedIndex[term] = [];
+      if (!this.invertedIndex[term].includes(doc.id)) this.invertedIndex[term].push(doc.id);
+    }
+  }
+  search(terms) {
+    const matched = new Set();
+    for (const t of terms) for (const d of (this.invertedIndex[t] || [])) matched.add(d);
+    this.queryCount++;
+    return [...matched].map(d => ({docId: d, nodeId: this.id, score: Math.random()*0.5+0.5}));
+  }
+  get docCount() { return Object.keys(this.documents).length; }
+  get termCount() { return Object.keys(this.invertedIndex).length; }
+  get load() { return Math.min(this.queryCount / 20, 1); }
+}
+
+class HybridSystem {
+  constructor(numNodes, strategy) {
+    this.strategy = strategy;
+    this.nodes = {};
+    for (let i = 0; i < numNodes; i++) {
+      const id = `node_${i}`;
+      this.nodes[id] = new IndexNode(id);
+    }
+    this.nodeIds = Object.keys(this.nodes);
+    this.termToNodes = {};   // term -> Set of nodeIds
+    this.docToNode = {};
+    this.stats = { hybrid:[], distributed:[], centralized:[] };
+    this.totalQueries = 0;
+  }
+
+  assignNode(docId) {
+    if (this.strategy === 'hash') {
+      return this.nodeIds[md5hash(docId) % this.nodeIds.length];
+    } else {
+      const num = parseInt(docId.split('_')[1] || '0');
+      return this.nodeIds[num % this.nodeIds.length];
+    }
+  }
+
+  addDoc(doc) {
+    const nodeId = this.assignNode(doc.id);
+    this.nodes[nodeId].addDoc(doc);
+    this.docToNode[doc.id] = nodeId;
+    for (const term of tokenize(doc.content)) {
+      if (!this.termToNodes[term]) this.termToNodes[term] = new Set();
+      this.termToNodes[term].add(nodeId);
+    }
+  }
+
+  simulateLatency(nodeCount) {
+    // Simulate realistic latency: base + per-node delay
+    return 15 + nodeCount * (12 + Math.random() * 18);
+  }
+
+  routeQuery(terms) {
+    const candidates = new Set();
+    for (const t of terms) for (const n of (this.termToNodes[t] || [])) candidates.add(n);
+    return candidates;
+  }
+
+  hybridSearch(query) {
+    const terms = tokenize(query);
+    const targets = this.routeQuery(terms);
+    let results = [];
+    for (const nid of targets) results = results.concat(this.nodes[nid].search(terms));
+    const latency = this.simulateLatency(targets.size);
+    this.stats.hybrid.push(latency);
+    this.totalQueries++;
+    return { results, nodesQueried: targets.size, totalNodes: this.nodeIds.length, latency, mode:'hybrid', queriedNodes: [...targets] };
+  }
+
+  distributedSearch(query) {
+    const terms = tokenize(query);
+    let results = [];
+    for (const node of Object.values(this.nodes)) results = results.concat(node.search(terms));
+    const latency = this.simulateLatency(this.nodeIds.length) * 1.3;
+    this.stats.distributed.push(latency);
+    this.totalQueries++;
+    return { results, nodesQueried: this.nodeIds.length, totalNodes: this.nodeIds.length, latency, mode:'distributed', queriedNodes: this.nodeIds };
+  }
+
+  centralizedSearch(query) {
+    const terms = tokenize(query);
+    const results = this.nodes[this.nodeIds[0]].search(terms);
+    // Centralized bottleneck: scans all data sequentially = higher base latency
+    const latency = 60 + Math.random() * 60;
+    this.stats.centralized.push(latency);
+    this.totalQueries++;
+    return { results, nodesQueried: 1, totalNodes: this.nodeIds.length, latency, mode:'centralized', queriedNodes: [this.nodeIds[0]] };
+  }
+
+  avgLatency(mode) {
+    const arr = this.stats[mode];
+    return arr.length ? arr.reduce((a,b) => a+b, 0) / arr.length : 0;
+  }
+}
+
+// ─── App State ────────────────────────────────────────────────────────────────
+
+let system = new HybridSystem(4, 'hash');
+SAMPLE_DOCS.forEach(d => system.addDoc(d));
+
+let latencyHistory = { labels:[], hybrid:[], distributed:[], centralized:[] };
+let compareData = {};
+let queryIdx = 0;
+
+// ─── Chart ────────────────────────────────────────────────────────────────────
+
+const ctx = document.getElementById('latencyChart').getContext('2d');
+let chart;
+
+function initChart() {
+  if (chart) chart.destroy();
+  chart = {
+    canvas: document.getElementById('latencyChart'),
+    data: { hybrid:[], distributed:[], centralized:[], labels:[] },
+    draw() {
+      const c = this.canvas;
+      const g = c.getContext('2d');
+      c.width = c.offsetWidth;
+      c.height = 260;
+      const W = c.width, H = c.height;
+      const pad = { top:20, right:20, bottom:40, left:50 };
+      const chartW = W - pad.left - pad.right;
+      const chartH = H - pad.top - pad.bottom;
+
+      g.clearRect(0, 0, W, H);
+
+      const allVals = [...this.data.hybrid, ...this.data.distributed, ...this.data.centralized];
+      const maxVal = allVals.length ? Math.max(...allVals) * 1.2 : 200;
+      const n = this.data.labels.length;
+      if (n === 0) {
+        g.fillStyle = '#64748b';
+        g.font = '13px Space Mono';
+        g.textAlign = 'center';
+        g.fillText('No data yet — run a query', W/2, H/2);
+        return;
+      }
+
+      // Grid lines
+      g.strokeStyle = 'rgba(30,48,80,0.6)';
+      g.lineWidth = 1;
+      for (let i = 0; i <= 4; i++) {
+        const y = pad.top + (chartH / 4) * i;
+        g.beginPath(); g.moveTo(pad.left, y); g.lineTo(W - pad.right, y); g.stroke();
+        g.fillStyle = '#64748b';
+        g.font = '10px Space Mono';
+        g.textAlign = 'right';
+        g.fillText(Math.round(maxVal - (maxVal/4)*i) + 'ms', pad.left - 6, y + 4);
+      }
+
+      // Lines
+      const series = [
+        { key:'hybrid', color:'#00d4ff', label:'Hybrid' },
+        { key:'distributed', color:'#ff6b35', label:'Distributed' },
+        { key:'centralized', color:'#7c3aed', label:'Centralized' },
+      ];
+
+      for (const s of series) {
+        if (!this.data[s.key].length) continue;
+        g.beginPath();
+        g.strokeStyle = s.color;
+        g.lineWidth = 2;
+        g.shadowBlur = 8;
+        g.shadowColor = s.color;
+        this.data[s.key].forEach((v, i) => {
+          const x = pad.left + (i / Math.max(n-1,1)) * chartW;
+          const y = pad.top + chartH - (v / maxVal) * chartH;
+          if (i===0) g.moveTo(x,y); else g.lineTo(x,y);
+        });
+        g.stroke();
+        g.shadowBlur = 0;
+
+        // Points
+        this.data[s.key].forEach((v, i) => {
+          const x = pad.left + (i / Math.max(n-1,1)) * chartW;
+          const y = pad.top + chartH - (v / maxVal) * chartH;
+          g.beginPath();
+          g.arc(x, y, 4, 0, Math.PI*2);
+          g.fillStyle = s.color;
+          g.fill();
+        });
+      }
+
+      // Legend
+      let lx = pad.left;
+      for (const s of series) {
+        g.fillStyle = s.color;
+        g.fillRect(lx, H - 20, 16, 3);
+        g.fillStyle = '#94a3b8';
+        g.font = '11px DM Sans';
+        g.textAlign = 'left';
+        g.fillText(s.label, lx + 20, H - 14);
+        lx += 100;
+      }
+
+      // X labels
+      this.data.labels.forEach((l, i) => {
+        const x = pad.left + (i / Math.max(n-1,1)) * chartW;
+        g.fillStyle = '#475569';
+        g.font = '10px Space Mono';
+        g.textAlign = 'center';
+        g.fillText(l, x, H - 26);
+      });
+    }
+  };
+}
+
+initChart();
+
+function pushToChart(label, results) {
+  chart.data.labels.push(label);
+  if (results.hybrid) chart.data.hybrid.push(results.hybrid.latency);
+  if (results.distributed) chart.data.distributed.push(results.distributed.latency);
+  if (results.centralized) chart.data.centralized.push(results.centralized.latency);
+  // Keep last 10
+  const maxLen = 10;
+  for (const k of ['labels','hybrid','distributed','centralized']) {
+    if (chart.data[k].length > maxLen) chart.data[k] = chart.data[k].slice(-maxLen);
+  }
+  chart.draw();
+}
+
+// ─── UI Helpers ───────────────────────────────────────────────────────────────
+
+function renderNodes(queriedNodes=[]) {
+  const grid = document.getElementById('nodeGrid');
+  grid.innerHTML = '';
+  for (const [nid, node] of Object.entries(system.nodes)) {
+    const isQueried = queriedNodes.includes(nid);
+    const div = document.createElement('div');
+    div.className = `node-card ${isQueried ? 'queried' : 'active'}`;
+    const docPct = Math.round((node.docCount / 20) * 100);
+    const loadPct = Math.round(node.load * 100);
+    div.innerHTML = `
+      <div class="node-id">
+        <span class="node-dot${isQueried ? '' : ''}"></span>
+        ${nid}${isQueried ? ' <span style="color:var(--accent);font-size:10px;">← queried</span>' : ''}
+      </div>
+      <div class="bar-wrap">
+        <div class="bar-label"><span>Docs</span><span>${node.docCount}</span></div>
+        <div class="bar"><div class="bar-fill bar-fill-blue" style="width:${docPct}%"></div></div>
+      </div>
+      <div class="bar-wrap">
+        <div class="bar-label"><span>Terms</span><span>${node.termCount}</span></div>
+        <div class="bar"><div class="bar-fill bar-fill-green" style="width:${Math.min(node.termCount/60*100,100)}%"></div></div>
+      </div>
+      <div class="bar-wrap">
+        <div class="bar-label"><span>Queries</span><span>${node.queryCount}</span></div>
+        <div class="bar"><div class="bar-fill bar-fill-blue" style="width:${loadPct}%"></div></div>
+      </div>
+    `;
+    grid.appendChild(div);
+  }
+}
+
+function renderResults(containerId, results, latencyEl, latency) {
+  const container = document.getElementById(containerId);
+  const latencySpan = document.getElementById(latencyEl);
+  if (latency !== null) {
+    const cls = latency < 50 ? 'speed-fast' : latency < 120 ? 'speed-mid' : 'speed-slow';
+    latencySpan.className = `speed-badge ${cls}`;
+    latencySpan.textContent = `${latency.toFixed(1)}ms`;
+  }
+  if (!results || results.length === 0) {
+    container.innerHTML = '<div class="empty-state">No matches found</div>';
+    return;
+  }
+  container.innerHTML = results.slice(0,6).map(r => {
+    const doc = SAMPLE_DOCS.find(d => d.id === r.docId);
+    return `<div class="result-item">
+      <div>
+        <div class="result-id">${r.docId}</div>
+        <div class="result-node">@ ${r.nodeId}</div>
+      </div>
+      <div style="flex:1">
+        <div style="font-size:12px;color:var(--text);margin-bottom:4px;">${doc ? doc.content.substring(0,70)+'…' : r.docId}</div>
+        <div class="score-bar"><div class="score-fill" style="width:${Math.round(r.score*100)}%"></div></div>
+      </div>
+      <div style="font-family:var(--mono);font-size:11px;color:var(--muted);">${(r.score*100).toFixed(0)}%</div>
+    </div>`;
+  }).join('');
+}
+
+function updateCompareTable() {
+  const tbody = document.getElementById('compareBody');
+  if (!Object.keys(compareData).length) return;
+
+  const rows = [
+    { mode:'hybrid', label:'⬡ Hybrid', color:'var(--accent)', cls:'tag-hybrid' },
+    { mode:'distributed', label:'◈ Distributed', color:'var(--accent2)', cls:'tag-distributed' },
+    { mode:'centralized', label:'◎ Centralized', color:'#a78bfa', cls:'tag-centralized' },
+  ];
+
+  tbody.innerHTML = rows.map(r => {
+    const d = compareData[r.mode];
+    if (!d) return '';
+    const savings = r.mode === 'hybrid' ? `${d.totalNodes - d.nodesQueried} nodes saved` : r.mode === 'distributed' ? 'None (broadcasts all)' : 'N/A';
+    const eff = r.mode === 'hybrid' ? `<span style="color:var(--green)">⬆ Best</span>` :
+                r.mode === 'distributed' ? `<span style="color:var(--yellow)">Mid</span>` :
+                `<span style="color:var(--red)">⬇ Worst (bottleneck)</span>`;
+    const latencyColor = d.latency < 60 ? 'var(--green)' : d.latency < 120 ? 'var(--yellow)' : 'var(--red)';
+    return `<tr>
+      <td><span class="tag ${r.cls}">${r.label}</span></td>
+      <td style="font-family:var(--mono);">${d.nodesQueried} / ${d.totalNodes}</td>
+      <td style="font-family:var(--mono);color:${latencyColor};">${d.latency.toFixed(1)}ms</td>
+      <td style="font-family:var(--mono);">${d.results.length}</td>
+      <td style="font-size:12px;color:var(--muted);">${savings}</td>
+      <td>${eff}</td>
+    </tr>`;
+  }).join('');
+}
+
+function updateStats() {
+  document.getElementById('stat-docs').textContent = SAMPLE_DOCS.length;
+  document.getElementById('stat-nodes').textContent = Object.keys(system.nodes).length;
+  document.getElementById('stat-queries').textContent = system.totalQueries;
+  if (system.stats.hybrid.length && system.stats.distributed.length) {
+    const hAvg = system.avgLatency('hybrid');
+    const dAvg = system.avgLatency('distributed');
+    const saving = Math.round(((dAvg - hAvg) / dAvg) * 100);
+    document.getElementById('stat-savings').textContent = saving > 0 ? `${saving}% faster` : 'Calculating…';
+  }
+}
+
+function addLog(mode, msg) {
+  const log = document.getElementById('systemLog');
+  const now = new Date();
+  const t = `${String(now.getHours()).padStart(2,'0')}:${String(now.getMinutes()).padStart(2,'0')}:${String(now.getSeconds()).padStart(2,'0')}`;
+  const entry = document.createElement('div');
+  entry.className = 'log-entry';
+  const modeClass = mode ? `log-mode-${mode}` : '';
+  entry.innerHTML = `<span class="log-time">${t}</span><span class="${modeClass}">[${(mode||'SYS').toUpperCase()}]</span><span class="log-msg">${msg}</span>`;
+  log.appendChild(entry);
+  log.scrollTop = log.scrollHeight;
+}
+
+// ─── Query Runner ─────────────────────────────────────────────────────────────
+
+function runQuery(mode) {
+  const query = document.getElementById('queryInput').value.trim();
+  if (!query) { addLog(null, 'Please enter a query.'); return; }
+
+  queryIdx++;
+  const label = `Q${queryIdx}`;
+  const chartUpdate = {};
+
+  if (mode === 'hybrid' || mode === 'all') {
+    const r = system.hybridSearch(query);
+    compareData.hybrid = r;
+    chartUpdate.hybrid = r;
+    renderResults('hybrid-results', r.results, 'hybrid-latency', r.latency);
+    renderNodes(r.queriedNodes);
+    addLog('hybrid', `Query: "${query}" → ${r.nodesQueried}/${r.totalNodes} nodes · ${r.results.length} results · ${r.latency.toFixed(1)}ms`);
+  }
+  if (mode === 'distributed' || mode === 'all') {
+    const r = system.distributedSearch(query);
+    compareData.distributed = r;
+    chartUpdate.distributed = r;
+    renderResults('dist-results', r.results, 'dist-latency', r.latency);
+    if (mode !== 'all') renderNodes(r.queriedNodes);
+    addLog('distributed', `Query: "${query}" → all ${r.totalNodes} nodes · ${r.results.length} results · ${r.latency.toFixed(1)}ms`);
+  }
+  if (mode === 'centralized' || mode === 'all') {
+    const r = system.centralizedSearch(query);
+    compareData.centralized = r;
+    chartUpdate.centralized = r;
+    renderResults('cent-results', r.results, 'cent-latency', r.latency);
+    if (mode === 'centralized') renderNodes(r.queriedNodes);
+    addLog('centralized', `Query: "${query}" → 1 node (bottleneck) · ${r.results.length} results · ${r.latency.toFixed(1)}ms`);
+  }
+
+  pushToChart(label, chartUpdate);
+  updateCompareTable();
+  updateStats();
+
+  // Update mode button styles
+  document.querySelectorAll('.mode-btn').forEach(b => b.className = 'mode-btn');
+  event.target.className = `mode-btn active-${mode}`;
+}
+
+function resetSystem() {
+  const numNodes = parseInt(document.getElementById('nodeCount').value);
+  const strategy = document.getElementById('partitionStrategy').value;
+  system = new HybridSystem(numNodes, strategy);
+  SAMPLE_DOCS.forEach(d => system.addDoc(d));
+  compareData = {};
+  queryIdx = 0;
+  latencyHistory = { labels:[], hybrid:[], distributed:[], centralized:[] };
+  initChart(); chart.draw();
+  renderNodes();
+  updateStats();
+  document.getElementById('compareBody').innerHTML = '<tr><td colspan="6" style="text-align:center;color:var(--muted);padding:20px;font-family:var(--mono);font-size:12px;">No queries run yet</td></tr>';
+  ['hybrid-results','dist-results','cent-results'].forEach(id => {
+    document.getElementById(id).innerHTML = '<div class="empty-state">Run a query to see results</div>';
+  });
+  ['hybrid-latency','dist-latency','cent-latency'].forEach(id => {
+    document.getElementById(id).textContent = '—';
+  });
+  document.getElementById('stat-savings').textContent = '—';
+  addLog(null, `System reset. ${numNodes} nodes · ${strategy} partitioning · 20 documents re-indexed.`);
+}
+
+// ─── Init ─────────────────────────────────────────────────────────────────────
+
+renderNodes();
+updateStats();
+chart.draw();
+
+// Re-draw chart on resize
+window.addEventListener('resize', () => chart.draw());
+
+// Enter key on input
+document.getElementById('queryInput').addEventListener('keydown', e => {
+  if (e.key === 'Enter') runQuery('all');
+});
+
+addLog(null, `Ready. 20 documents indexed across ${Object.keys(system.nodes).length} nodes. Try "distributed indexing" or "search engines".`);
+</script>
+</body>
+</html>
