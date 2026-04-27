@@ -28,272 +28,163 @@ st.set_page_config(
 # ── Custom CSS ────────────────────────────────────────────────────────────────
 st.markdown("""
 <style>
-  @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap');
+  @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Fira+Code:wght@400;600&display=swap');
 
-  /* ══ LIGHT THEME BASE ══ */
-  [data-testid="stAppViewContainer"],
-  [data-testid="stMain"],
-  .main, section.main {
-    background-color: #f4f6fb !important;
-    font-family: 'Plus Jakarta Sans', sans-serif !important;
+  /* ══ COLORFUL LIGHT THEME ══ */
+  [data-testid="stAppViewContainer"], [data-testid="stMain"], .main, section.main {
+    background: linear-gradient(135deg, #fdf6ff 0%, #f0f8ff 50%, #f0fff8 100%) !important;
+    font-family: 'Nunito', sans-serif !important;
   }
 
   /* ── Sidebar ── */
-  [data-testid="stSidebar"],
-  [data-testid="stSidebar"] > div {
-    background: linear-gradient(180deg, #1e3a5f 0%, #0f2340 100%) !important;
+  [data-testid="stSidebar"], [data-testid="stSidebar"] > div {
+    background: linear-gradient(180deg, #4361ee 0%, #7209b7 100%) !important;
     border-right: none !important;
   }
-  [data-testid="stSidebar"] * { color: #bfd4ee !important; font-family: 'Plus Jakarta Sans', sans-serif !important; }
-  [data-testid="stSidebar"] h1,
-  [data-testid="stSidebar"] h2,
-  [data-testid="stSidebar"] h3 {
-    color: #ffffff !important;
-    font-family: 'Plus Jakarta Sans', sans-serif !important;
-    font-weight: 800 !important;
-    letter-spacing: -0.02em !important;
+  [data-testid="stSidebar"] * { color: #e0d7ff !important; font-family: 'Nunito', sans-serif !important; }
+  [data-testid="stSidebar"] h1, [data-testid="stSidebar"] h2, [data-testid="stSidebar"] h3 {
+    color: #ffffff !important; font-weight: 900 !important; letter-spacing: -0.01em !important;
   }
-  [data-testid="stSidebar"] hr { border-color: rgba(255,255,255,0.1) !important; }
-  [data-testid="stSidebar"] .stRadio label { color: #93b8d8 !important; font-size: 13px !important; }
-  [data-testid="stSidebar"] [data-testid="stSelectbox"] label { color: #93b8d8 !important; font-size: 12px !important; }
-
-  /* ── Sidebar selectbox / inputs ── */
+  [data-testid="stSidebar"] hr { border-color: rgba(255,255,255,0.15) !important; }
+  [data-testid="stSidebar"] .stRadio label { color: #c4b5fd !important; font-size: 14px !important; font-weight: 700 !important; }
+  [data-testid="stSidebar"] [data-testid="stSelectbox"] label { color: #c4b5fd !important; font-size: 12px !important; font-weight: 700 !important; }
   [data-testid="stSidebar"] [data-baseweb="select"] > div {
-    background-color: rgba(255,255,255,0.08) !important;
-    border: 1px solid rgba(255,255,255,0.15) !important;
-    border-radius: 8px !important;
-    color: #ffffff !important;
+    background-color: rgba(255,255,255,0.12) !important;
+    border: 1.5px solid rgba(255,255,255,0.2) !important;
+    border-radius: 10px !important; color: #fff !important;
   }
-  [data-testid="stSidebar"] [data-baseweb="select"] span { color: #ffffff !important; }
+  [data-testid="stSidebar"] [data-baseweb="select"] span { color: #fff !important; }
 
   /* ── Global text ── */
-  body, p, div, label, span {
-    font-family: 'Plus Jakarta Sans', sans-serif !important;
-    color: #1e293b !important;
-  }
-  h1 {
-    color: #0f2340 !important;
-    font-family: 'Plus Jakarta Sans', sans-serif !important;
-    font-weight: 800 !important;
-    font-size: 2.2rem !important;
-    letter-spacing: -0.03em !important;
-  }
-  h2, h3 {
-    color: #1e3a5f !important;
-    font-family: 'Plus Jakarta Sans', sans-serif !important;
-    font-weight: 700 !important;
-    letter-spacing: -0.02em !important;
-  }
+  body, p, div, label, span { font-family: 'Nunito', sans-serif !important; color: #1a1a2e !important; }
+  h1 { color: #1a1a2e !important; font-family: 'Nunito', sans-serif !important; font-weight: 900 !important; font-size: 2.2rem !important; letter-spacing: -0.03em !important; }
+  h2, h3 { color: #4361ee !important; font-family: 'Nunito', sans-serif !important; font-weight: 800 !important; }
 
-  /* ── Input fields ── */
+  /* ── Inputs ── */
   input[type="text"], input[type="number"], textarea,
-  [data-testid="stTextInput"] input,
-  [data-testid="stTextArea"] textarea {
-    background-color: #ffffff !important;
-    color: #1e293b !important;
-    border: 1.5px solid #cbd5e1 !important;
-    border-radius: 10px !important;
-    font-family: 'Plus Jakarta Sans', sans-serif !important;
-    font-size: 14px !important;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.06) !important;
+  [data-testid="stTextInput"] input, [data-testid="stTextArea"] textarea {
+    background: #ffffff !important; color: #1a1a2e !important;
+    border: 2px solid #e8e0ff !important; border-radius: 12px !important;
+    font-family: 'Nunito', sans-serif !important; font-size: 14px !important; font-weight: 600 !important;
   }
-  [data-testid="stTextInput"] input:focus {
-    border-color: #2563eb !important;
-    box-shadow: 0 0 0 3px rgba(37,99,235,0.12) !important;
-  }
-  [data-testid="stTextInput"] label { color: #64748b !important; font-size: 13px !important; font-weight: 500 !important; }
+  [data-testid="stTextInput"] input:focus { border-color: #4361ee !important; box-shadow: 0 0 0 3px rgba(67,97,238,0.15) !important; }
+  [data-testid="stTextInput"] label { color: #6b7280 !important; font-size: 13px !important; font-weight: 700 !important; }
 
   /* ── Selectbox ── */
-  [data-testid="stSelectbox"] > div > div,
-  [data-baseweb="select"] > div {
-    background-color: #ffffff !important;
-    border: 1.5px solid #cbd5e1 !important;
-    border-radius: 10px !important;
-    color: #1e293b !important;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.06) !important;
+  [data-testid="stSelectbox"] > div > div, [data-baseweb="select"] > div {
+    background: #ffffff !important; border: 2px solid #e8e0ff !important;
+    border-radius: 12px !important; color: #1a1a2e !important;
   }
-  [data-baseweb="select"] span,
-  [data-baseweb="select"] div { color: #1e293b !important; background: transparent !important; }
-  [data-testid="stSelectbox"] label { color: #64748b !important; font-size: 13px !important; font-weight: 500 !important; }
-  [data-baseweb="popover"] ul,
-  [data-baseweb="menu"] { background-color: #ffffff !important; border: 1px solid #e2e8f0 !important; border-radius: 10px !important; box-shadow: 0 8px 24px rgba(0,0,0,0.12) !important; }
-  [data-baseweb="menu"] li { color: #1e293b !important; font-family: 'Plus Jakarta Sans', sans-serif !important; }
-  [data-baseweb="menu"] li:hover { background-color: #eff6ff !important; }
+  [data-baseweb="select"] span, [data-baseweb="select"] div { color: #1a1a2e !important; background: transparent !important; }
+  [data-testid="stSelectbox"] label { color: #6b7280 !important; font-size: 13px !important; font-weight: 700 !important; }
+  [data-baseweb="popover"] ul, [data-baseweb="menu"] {
+    background: #ffffff !important; border: 2px solid #e8e0ff !important;
+    border-radius: 12px !important; box-shadow: 0 8px 32px rgba(67,97,238,0.15) !important;
+  }
+  [data-baseweb="menu"] li { color: #1a1a2e !important; font-family: 'Nunito', sans-serif !important; font-weight: 600 !important; }
+  [data-baseweb="menu"] li:hover { background: #f0f0ff !important; }
 
   /* ── Radio ── */
-  [data-testid="stRadio"] label { color: #475569 !important; font-size: 13px !important; font-weight: 500 !important; }
-  [data-testid="stRadio"] label[data-checked="true"] { color: #1e3a5f !important; font-weight: 600 !important; }
+  [data-testid="stRadio"] label { color: #4a4a6a !important; font-size: 14px !important; font-weight: 700 !important; }
 
   /* ── Metric cards ── */
   [data-testid="stMetric"] {
-    background: #ffffff !important;
-    border: 1px solid #e2e8f0 !important;
-    border-radius: 14px !important;
-    padding: 20px !important;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.06) !important;
+    background: #ffffff !important; border: 2px solid #e8e0ff !important;
+    border-radius: 16px !important; padding: 20px !important;
+    box-shadow: 0 4px 16px rgba(67,97,238,0.08) !important;
   }
   [data-testid="stMetricLabel"] p {
-    color: #64748b !important;
-    font-size: 12px !important;
-    font-weight: 600 !important;
-    text-transform: uppercase !important;
-    letter-spacing: 0.05em !important;
-    font-family: 'Plus Jakarta Sans', sans-serif !important;
+    color: #6b7280 !important; font-size: 12px !important; font-weight: 800 !important;
+    text-transform: uppercase !important; letter-spacing: 0.06em !important; font-family: 'Nunito', sans-serif !important;
   }
   [data-testid="stMetricValue"] {
-    color: #0f2340 !important;
-    font-family: 'JetBrains Mono', monospace !important;
-    font-size: 2rem !important;
-    font-weight: 600 !important;
+    color: #4361ee !important; font-family: 'Fira Code', monospace !important;
+    font-size: 2rem !important; font-weight: 700 !important;
   }
-  [data-testid="stMetricDelta"] { font-size: 12px !important; }
 
   /* ── Buttons ── */
   .stButton > button {
-    background: linear-gradient(135deg, #1e3a5f, #2563eb) !important;
-    color: #ffffff !important;
-    font-weight: 700 !important;
-    border-radius: 10px !important;
-    border: none !important;
-    padding: 10px 28px !important;
-    font-family: 'Plus Jakarta Sans', sans-serif !important;
-    font-size: 14px !important;
-    letter-spacing: 0.01em !important;
-    box-shadow: 0 4px 12px rgba(37,99,235,0.3) !important;
-    transition: all 0.2s !important;
+    background: linear-gradient(135deg, #ff6b9d, #4361ee) !important;
+    color: #fff !important; font-weight: 800 !important; border-radius: 12px !important;
+    border: none !important; padding: 10px 28px !important;
+    font-family: 'Nunito', sans-serif !important; font-size: 14px !important;
+    box-shadow: 0 6px 20px rgba(255,107,157,0.35) !important; transition: all 0.2s !important;
   }
-  .stButton > button:hover {
-    box-shadow: 0 6px 20px rgba(37,99,235,0.4) !important;
-    transform: translateY(-1px) !important;
-  }
+  .stButton > button:hover { transform: translateY(-2px) !important; box-shadow: 0 10px 28px rgba(255,107,157,0.4) !important; }
 
   /* ── Tabs ── */
   [data-testid="stTabs"] [role="tablist"] {
-    background: #ffffff !important;
-    border-radius: 12px !important;
-    padding: 4px !important;
-    border: 1px solid #e2e8f0 !important;
-    box-shadow: 0 1px 4px rgba(0,0,0,0.06) !important;
+    background: #ffffff !important; border-radius: 14px !important;
+    padding: 4px !important; border: 2px solid #e8e0ff !important;
+    box-shadow: 0 2px 8px rgba(67,97,238,0.08) !important;
   }
   [data-testid="stTabs"] button[role="tab"] {
-    color: #64748b !important;
-    border-radius: 8px !important;
-    padding: 8px 16px !important;
-    font-family: 'Plus Jakarta Sans', sans-serif !important;
-    font-size: 13px !important;
-    font-weight: 600 !important;
+    color: #6b7280 !important; border-radius: 10px !important; padding: 8px 18px !important;
+    font-family: 'Nunito', sans-serif !important; font-size: 13px !important; font-weight: 800 !important;
   }
   [data-testid="stTabs"] button[role="tab"][aria-selected="true"] {
-    background: linear-gradient(135deg, #1e3a5f, #2563eb) !important;
-    color: #ffffff !important;
-    box-shadow: 0 2px 8px rgba(37,99,235,0.25) !important;
+    background: linear-gradient(135deg, #4361ee, #7209b7) !important;
+    color: #fff !important; box-shadow: 0 4px 12px rgba(67,97,238,0.3) !important;
   }
 
   /* ── Expander ── */
   [data-testid="stExpander"] {
-    background: #ffffff !important;
-    border: 1px solid #e2e8f0 !important;
-    border-radius: 12px !important;
-    box-shadow: 0 1px 4px rgba(0,0,0,0.05) !important;
+    background: #ffffff !important; border: 2px solid #e8e0ff !important;
+    border-radius: 14px !important; box-shadow: 0 2px 8px rgba(67,97,238,0.06) !important;
   }
-  [data-testid="stExpander"] summary {
-    color: #475569 !important;
-    font-family: 'Plus Jakarta Sans', sans-serif !important;
-    font-size: 14px !important;
-    font-weight: 600 !important;
-  }
-  [data-testid="stExpander"] summary:hover { color: #1e3a5f !important; }
+  [data-testid="stExpander"] summary { color: #4a4a6a !important; font-family: 'Nunito', sans-serif !important; font-size: 14px !important; font-weight: 800 !important; }
+  [data-testid="stExpander"] summary:hover { color: #4361ee !important; }
 
   /* ── DataFrame ── */
-  [data-testid="stDataFrame"] {
-    border: 1px solid #e2e8f0 !important;
-    border-radius: 12px !important;
-    overflow: hidden !important;
-    box-shadow: 0 1px 4px rgba(0,0,0,0.05) !important;
-  }
-  [data-testid="stDataFrame"] th {
-    background: #f8fafc !important;
-    color: #64748b !important;
-    font-family: 'Plus Jakarta Sans', sans-serif !important;
-    font-size: 12px !important;
-    font-weight: 700 !important;
-    letter-spacing: 0.04em !important;
-    text-transform: uppercase !important;
-  }
-  [data-testid="stDataFrame"] td {
-    color: #1e293b !important;
-    background: #ffffff !important;
-    font-size: 13px !important;
-  }
+  [data-testid="stDataFrame"] { border: 2px solid #e8e0ff !important; border-radius: 14px !important; overflow: hidden !important; }
+  [data-testid="stDataFrame"] th { background: #f5f0ff !important; color: #4a4a6a !important; font-family: 'Nunito', sans-serif !important; font-size: 12px !important; font-weight: 800 !important; letter-spacing: 0.05em !important; text-transform: uppercase !important; }
+  [data-testid="stDataFrame"] td { color: #1a1a2e !important; background: #fff !important; font-size: 13px !important; font-weight: 600 !important; }
 
   /* ── Progress bars ── */
-  [data-testid="stProgress"] > div {
-    background: #e2e8f0 !important;
-    border-radius: 6px !important;
-  }
-  [data-testid="stProgress"] > div > div {
-    background: linear-gradient(90deg, #2563eb, #1e3a5f) !important;
-    border-radius: 6px !important;
-  }
-  [data-testid="stProgress"] p { color: #64748b !important; font-size: 12px !important; font-weight: 500 !important; }
+  [data-testid="stProgress"] > div { background: #e8e0ff !important; border-radius: 8px !important; }
+  [data-testid="stProgress"] > div > div { background: linear-gradient(90deg, #ff6b9d, #4361ee) !important; border-radius: 8px !important; }
+  [data-testid="stProgress"] p { color: #6b7280 !important; font-size: 12px !important; font-weight: 700 !important; }
 
   /* ── Alerts ── */
-  .stSuccess { background: #f0fdf4 !important; border-color: #86efac !important; color: #166534 !important; border-radius: 10px !important; }
-  .stInfo    { background: #eff6ff !important; border-color: #93c5fd !important; color: #1e40af !important; border-radius: 10px !important; }
-  .stWarning { background: #fffbeb !important; border-color: #fcd34d !important; color: #92400e !important; border-radius: 10px !important; }
+  .stSuccess { background: #f0fdf9 !important; border-color: #6ee7b7 !important; color: #065f46 !important; border-radius: 12px !important; }
+  .stInfo    { background: #f0f0ff !important; border-color: #a5b4fc !important; color: #3730a3 !important; border-radius: 12px !important; }
+  .stWarning { background: #fffbeb !important; border-color: #fcd34d !important; color: #92400e !important; border-radius: 12px !important; }
 
   /* ── Markdown ── */
-  [data-testid="stMarkdownContainer"] p,
-  [data-testid="stMarkdownContainer"] li {
-    color: #334155 !important;
-    font-size: 14px !important;
-    line-height: 1.75 !important;
-    font-family: 'Plus Jakarta Sans', sans-serif !important;
+  [data-testid="stMarkdownContainer"] p, [data-testid="stMarkdownContainer"] li {
+    color: #4a4a6a !important; font-size: 14px !important; line-height: 1.75 !important;
+    font-family: 'Nunito', sans-serif !important; font-weight: 600 !important;
   }
-  [data-testid="stMarkdownContainer"] strong { color: #0f2340 !important; font-weight: 700 !important; }
+  [data-testid="stMarkdownContainer"] strong { color: #1a1a2e !important; font-weight: 800 !important; }
   [data-testid="stMarkdownContainer"] code {
-    color: #1e40af !important;
-    background: #eff6ff !important;
-    border: 1px solid #bfdbfe !important;
-    border-radius: 5px !important;
-    padding: 1px 7px !important;
-    font-family: 'JetBrains Mono', monospace !important;
-    font-size: 12px !important;
+    color: #4361ee !important; background: #f0f0ff !important;
+    border: 1.5px solid #c7d2fe !important; border-radius: 6px !important;
+    padding: 1px 7px !important; font-family: 'Fira Code', monospace !important; font-size: 12px !important;
   }
-  [data-testid="stMarkdownContainer"] table { border-collapse: collapse !important; width: 100% !important; border-radius: 10px !important; overflow: hidden !important; }
-  [data-testid="stMarkdownContainer"] th { background: #f1f5f9 !important; color: #475569 !important; padding: 10px 14px !important; border: 1px solid #e2e8f0 !important; font-size: 12px !important; font-weight: 700 !important; text-transform: uppercase !important; letter-spacing: 0.04em !important; }
-  [data-testid="stMarkdownContainer"] td { color: #1e293b !important; padding: 10px 14px !important; border: 1px solid #e2e8f0 !important; font-size: 13px !important; background: #ffffff !important; }
-  [data-testid="stMarkdownContainer"] tr:nth-child(even) td { background: #f8fafc !important; }
+  [data-testid="stMarkdownContainer"] table { border-collapse: collapse !important; width: 100% !important; }
+  [data-testid="stMarkdownContainer"] th { background: #f5f0ff !important; color: #4a4a6a !important; padding: 10px 14px !important; border: 2px solid #e8e0ff !important; font-size: 12px !important; font-weight: 800 !important; text-transform: uppercase !important; }
+  [data-testid="stMarkdownContainer"] td { color: #1a1a2e !important; padding: 10px 14px !important; border: 1px solid #e8e0ff !important; font-size: 13px !important; font-weight: 600 !important; background: #fff !important; }
+  [data-testid="stMarkdownContainer"] tr:nth-child(even) td { background: #fdf6ff !important; }
 
-  /* ── Caption ── */
-  [data-testid="stCaptionContainer"] p { color: #94a3b8 !important; font-size: 12px !important; }
-
-  /* ── Divider ── */
-  hr { border-color: #e2e8f0 !important; }
-
-  /* ── Spinner ── */
-  [data-testid="stSpinner"] p { color: #2563eb !important; font-family: 'Plus Jakarta Sans', sans-serif !important; }
+  /* ── Caption / divider / spinner ── */
+  [data-testid="stCaptionContainer"] p { color: #9ca3af !important; font-size: 12px !important; }
+  hr { border-color: #e8e0ff !important; }
+  [data-testid="stSpinner"] p { color: #4361ee !important; font-family: 'Nunito', sans-serif !important; font-weight: 700 !important; }
 
   /* ── Result box ── */
   .result-box {
-    background: #ffffff;
-    border: 1px solid #e2e8f0;
-    border-radius: 10px;
-    padding: 14px 16px;
-    margin-bottom: 8px;
-    box-shadow: 0 1px 4px rgba(0,0,0,0.05);
+    background: #ffffff; border: 2px solid #e8e0ff; border-radius: 12px;
+    padding: 14px 16px; margin-bottom: 8px;
+    box-shadow: 0 2px 8px rgba(67,97,238,0.06);
     transition: border-color 0.2s, box-shadow 0.2s;
   }
-  .result-box:hover {
-    border-color: #93c5fd;
-    box-shadow: 0 4px 12px rgba(37,99,235,0.1);
-  }
+  .result-box:hover { border-color: #a5b4fc; box-shadow: 0 6px 20px rgba(67,97,238,0.12); }
 
   /* ── Scrollbar ── */
   ::-webkit-scrollbar { width: 6px; height: 6px; }
-  ::-webkit-scrollbar-track { background: #f1f5f9; }
-  ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 3px; }
-  ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+  ::-webkit-scrollbar-track { background: #fdf6ff; }
+  ::-webkit-scrollbar-thumb { background: #c4b5fd; border-radius: 3px; }
+  ::-webkit-scrollbar-thumb:hover { background: #a78bfa; }
 </style>
 """, unsafe_allow_html=True)
 
@@ -478,7 +369,7 @@ if page == "🔍 Query Interface":
         # Results display
         st.markdown("### 📊 Results")
         res_cols = st.columns(len(results))
-        mode_colors = {"hybrid": "#2563eb", "distributed": "#e85d04", "centralized": "#7c3aed"}
+        mode_colors = {"hybrid": "#0cb4ce", "distributed": "#ff9a3c", "centralized": "#7209b7"}
         mode_labels = {"hybrid": "⬡ HYBRID", "distributed": "◈ DISTRIBUTED", "centralized": "◎ CENTRALIZED"}
 
         for col, (mode, r) in zip(res_cols, results.items()):
@@ -517,11 +408,11 @@ if page == "🔍 Query Interface":
                         marker=dict(size=7, color=color)
                     ))
             fig.update_layout(
-                paper_bgcolor="#ffffff", plot_bgcolor="#f8fafc",
-                font=dict(color="#334155", family="Plus Jakarta Sans"),
-                xaxis=dict(gridcolor="#e2e8f0", title="Query"),
-                yaxis=dict(gridcolor="#e2e8f0", title="Latency (ms)"),
-                legend=dict(bgcolor="#ffffff", bordercolor="#e2e8f0"),
+                paper_bgcolor="#fdf6ff", plot_bgcolor="#ffffff",
+                font=dict(color="#4a4a6a", family="Nunito"),
+                xaxis=dict(gridcolor="#ede8f5", title="Query"),
+                yaxis=dict(gridcolor="#ede8f5", title="Latency (ms)"),
+                legend=dict(bgcolor="#ffffff", bordercolor="#e8e0ff"),
                 margin=dict(l=40, r=20, t=20, b=40), height=280
             )
             st.plotly_chart(fig, use_container_width=True)
@@ -557,11 +448,11 @@ elif page == "📊 Benchmarks":
 
     tab1, tab2, tab3, tab4 = st.tabs(["📏 Latency vs Size", "🔢 Latency vs Nodes", "🎯 Routing Efficiency", "⚡ Throughput"])
 
-    COLORS = {"hybrid": "#2563eb", "distributed": "#e85d04", "centralized": "#7c3aed"}
+    COLORS = {"hybrid": "#0cb4ce", "distributed": "#ff9a3c", "centralized": "#7209b7"}
     LAYOUT = dict(
-        paper_bgcolor="#ffffff", plot_bgcolor="#f8fafc",
-        font=dict(color="#334155", family="Plus Jakarta Sans"),
-        legend=dict(bgcolor="#ffffff", bordercolor="#e2e8f0"),
+        paper_bgcolor="#fdf6ff", plot_bgcolor="#ffffff",
+        font=dict(color="#4a4a6a", family="Nunito"),
+        legend=dict(bgcolor="#ffffff", bordercolor="#e8e0ff"),
         margin=dict(l=50, r=20, t=30, b=50),
     )
 
@@ -576,10 +467,10 @@ elif page == "📊 Benchmarks":
                 marker=dict(size=8, color=COLORS[mode])
             ))
         fig.add_annotation(text="Centralized: 5,014ms at 1000 docs (off chart)", x=600, y=85,
-                           showarrow=False, font=dict(color="#7c3aed", size=11))
+                           showarrow=False, font=dict(color="#7209b7", size=11))
         fig.update_layout(**LAYOUT, height=380,
-            xaxis=dict(gridcolor="#e2e8f0", title="Dataset Size (documents)"),
-            yaxis=dict(gridcolor="#e2e8f0", title="Avg Latency (ms)", range=[0, 100]))
+            xaxis=dict(gridcolor="#ede8f5", title="Dataset Size (documents)"),
+            yaxis=dict(gridcolor="#ede8f5", title="Avg Latency (ms)", range=[0, 100]))
         st.plotly_chart(fig, use_container_width=True)
 
         st.markdown("""
@@ -608,10 +499,10 @@ elif page == "📊 Benchmarks":
                 marker=dict(size=8, color=COLORS[mode])
             ))
         fig.add_annotation(text="Centralized: 2,514ms → 325ms (inverted, off chart)", x=8, y=140,
-                           showarrow=False, font=dict(color="#7c3aed", size=11))
+                           showarrow=False, font=dict(color="#7209b7", size=11))
         fig.update_layout(**LAYOUT, height=380,
-            xaxis=dict(gridcolor="#e2e8f0", title="Number of Nodes"),
-            yaxis=dict(gridcolor="#e2e8f0", title="Avg Latency (ms)", range=[0, 160]))
+            xaxis=dict(gridcolor="#ede8f5", title="Number of Nodes"),
+            yaxis=dict(gridcolor="#ede8f5", title="Avg Latency (ms)", range=[0, 160]))
         st.plotly_chart(fig, use_container_width=True)
         st.markdown("**Finding:** Hybrid is consistently **20–25% faster** than pure Distributed at all node counts by pruning irrelevant nodes before dispatching.")
 
@@ -624,12 +515,12 @@ elif page == "📊 Benchmarks":
 
         fig = go.Figure()
         fig.add_trace(go.Bar(name="⬡ Hybrid", x=queries_short, y=hybrid_lat,
-                             marker_color="#2563eb", opacity=0.85))
+                             marker_color="#0cb4ce", opacity=0.85))
         fig.add_trace(go.Bar(name="◈ Distributed", x=queries_short, y=dist_lat,
-                             marker_color="#e85d04", opacity=0.85))
+                             marker_color="#ff9a3c", opacity=0.85))
         fig.update_layout(**LAYOUT, barmode="group", height=380,
-            xaxis=dict(gridcolor="#e2e8f0", title="Query Type", tickangle=-30),
-            yaxis=dict(gridcolor="#e2e8f0", title="Latency (ms)"))
+            xaxis=dict(gridcolor="#ede8f5", title="Query Type", tickangle=-30),
+            yaxis=dict(gridcolor="#ede8f5", title="Latency (ms)"))
         st.plotly_chart(fig, use_container_width=True)
 
         df2 = pd.DataFrame({
@@ -645,12 +536,12 @@ elif page == "📊 Benchmarks":
         fig = go.Figure(go.Bar(
             x=list(THROUGHPUT.keys()),
             y=list(THROUGHPUT.values()),
-            marker_color=["#2563eb", "#e85d04", "#7c3aed"],
+            marker_color=["#0cb4ce", "#ff9a3c", "#7209b7"],
             text=[f"{v} q/s" for v in THROUGHPUT.values()],
             textposition="outside",
         ))
         fig.update_layout(**LAYOUT, height=360,
-            yaxis=dict(gridcolor="#e2e8f0", title="Throughput (queries/sec)"),
+            yaxis=dict(gridcolor="#ede8f5", title="Throughput (queries/sec)"),
             xaxis=dict(title="Mode"))
         st.plotly_chart(fig, use_container_width=True)
         st.markdown("""
@@ -689,7 +580,7 @@ elif page == "🗃️ Index Explorer":
             marker_colors=["#2563eb", "#e85d04", "#7c3aed", "#059669", "#d97706", "#dc2626", "#64748b", "#0ea5e9"]
         ))
         fig_pie.update_layout(
-            paper_bgcolor="#0e1624", font=dict(color="#334155"),
+            paper_bgcolor="#0e1624", font=dict(color="#4a4a6a"),
             showlegend=True, height=280, margin=dict(l=0,r=0,t=20,b=0),
             title=dict(text="Doc Distribution", font=dict(color="#94a3b8", size=13))
         )
@@ -742,7 +633,7 @@ elif page == "📋 System Log":
     else:
         st.markdown(f"**{len(st.session_state.query_log)} queries logged**")
 
-        mode_colors = {"hybrid": "#2563eb", "distributed": "#e85d04", "centralized": "#7c3aed"}
+        mode_colors = {"hybrid": "#0cb4ce", "distributed": "#ff9a3c", "centralized": "#7209b7"}
 
         for entry in reversed(st.session_state.query_log):
             with st.expander(f"Q{entry['q']}: \"{entry['query']}\" — {entry['mode']}"):
