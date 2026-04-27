@@ -6,527 +6,164 @@
 <title>Hybrid Indexing System</title>
 <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Fira+Code:wght@400;600&display=swap" rel="stylesheet">
 <style>
-:root {
-  --pink:   #ff6b9d;
-  --orange: #ff9a3c;
-  --yellow: #ffd166;
-  --green:  #06d6a0;
-  --teal:   #0cb4ce;
-  --blue:   #4361ee;
-  --purple: #7209b7;
-  --bg:     #fdf6ff;
-  --white:  #ffffff;
-  --ink:    #1a1a2e;
-  --ink2:   #4a4a6a;
-  --border: #ede8f5;
-  --sans:   'Nunito', sans-serif;
-  --mono:   'Fira Code', monospace;
-}
+:root{--pink:#ff6b9d;--orange:#ff9a3c;--green:#06d6a0;--teal:#0cb4ce;--blue:#4361ee;--purple:#7209b7;--bg:#fdf6ff;--white:#ffffff;--ink:#1a1a2e;--ink2:#4a4a6a;--border:#ede8f5;--sans:'Nunito',sans-serif;--mono:'Fira Code',monospace;}
 *{box-sizing:border-box;margin:0;padding:0;}
 body{background:var(--bg);color:var(--ink);font-family:var(--sans);min-height:100vh;overflow-x:hidden;}
+body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;background:radial-gradient(ellipse 600px 400px at 10% 20%,rgba(255,107,157,0.1) 0%,transparent 70%),radial-gradient(ellipse 500px 350px at 90% 10%,rgba(67,97,238,0.08) 0%,transparent 70%),radial-gradient(ellipse 600px 400px at 50% 90%,rgba(6,214,160,0.07) 0%,transparent 70%);}
 
-/* ── Bubbly background blobs ── */
-body::before{
-  content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
-  background:
-    radial-gradient(ellipse 600px 400px at 10% 20%, rgba(255,107,157,0.12) 0%, transparent 70%),
-    radial-gradient(ellipse 500px 350px at 90% 10%, rgba(67,97,238,0.1) 0%, transparent 70%),
-    radial-gradient(ellipse 700px 500px at 50% 90%, rgba(6,214,160,0.08) 0%, transparent 70%),
-    radial-gradient(ellipse 400px 300px at 80% 60%, rgba(255,154,60,0.1) 0%, transparent 70%);
-}
-
-/* ── NAV ── */
-nav{
-  position:sticky;top:0;z-index:100;
-  background:rgba(253,246,255,0.85);backdrop-filter:blur(16px);
-  border-bottom:2px solid var(--border);
-  padding:0 32px;display:flex;align-items:center;gap:0;
-}
-.nav-brand{
-  font-size:20px;font-weight:900;
-  background:linear-gradient(135deg,var(--pink),var(--blue));
-  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
-  padding:16px 0;margin-right:32px;white-space:nowrap;
-  letter-spacing:-0.02em;
-}
+nav{position:sticky;top:0;z-index:100;background:rgba(253,246,255,0.92);backdrop-filter:blur(16px);border-bottom:2px solid var(--border);padding:0 32px;display:flex;align-items:center;gap:0;}
+.nav-brand{font-size:18px;font-weight:900;background:linear-gradient(135deg,var(--pink),var(--blue));-webkit-background-clip:text;-webkit-text-fill-color:transparent;padding:14px 0;margin-right:28px;white-space:nowrap;}
 .nav-links{display:flex;gap:4px;flex:1;}
-.nav-link{
-  padding:8px 18px;border-radius:24px;
-  font-size:14px;font-weight:700;cursor:pointer;
-  border:none;background:transparent;color:var(--ink2);
-  transition:all 0.2s;white-space:nowrap;
-}
+.nav-link{padding:7px 16px;border-radius:20px;font-size:13px;font-weight:700;cursor:pointer;border:none;background:transparent;color:var(--ink2);transition:all 0.2s;white-space:nowrap;}
 .nav-link:hover{background:var(--border);color:var(--ink);}
-.nav-link.active{
-  background:var(--ink);color:#fff;
-  box-shadow:0 4px 12px rgba(26,26,46,0.25);
-}
-.nav-team{
-  display:flex;gap:6px;margin-left:auto;
-  font-size:11px;font-weight:700;
-}
-.pill{
-  padding:4px 10px;border-radius:20px;
-  font-size:11px;font-weight:700;
-}
-.pill-pink{background:#ffeef5;color:var(--pink);}
-.pill-blue{background:#eef0ff;color:var(--blue);}
-.pill-green{background:#e8fdf7;color:#059669;}
+.nav-link.active{background:var(--ink);color:#fff;box-shadow:0 4px 12px rgba(26,26,46,0.2);}
+.nav-team{display:flex;gap:6px;margin-left:auto;}
+.pill{padding:3px 10px;border-radius:20px;font-size:11px;font-weight:700;}
+.pill-pink{background:#ffeef5;color:var(--pink);}.pill-blue{background:#eef0ff;color:var(--blue);}.pill-green{background:#e8fdf7;color:#059669;}
 
-/* ── PAGES ── */
-.page{display:none;min-height:calc(100vh - 57px);position:relative;z-index:1;}
+.page{display:none;min-height:calc(100vh - 53px);position:relative;z-index:1;}
 .page.active{display:block;}
-.container{max-width:1160px;margin:0 auto;padding:48px 32px;}
+.container{max-width:1160px;margin:0 auto;padding:32px;}
+.page-title{font-size:22px;font-weight:900;letter-spacing:-0.02em;margin-bottom:4px;}
+.page-sub{font-size:13px;color:var(--ink2);font-weight:600;margin-bottom:24px;}
 
-/* ── HERO (Page 1) ── */
-.hero{
-  text-align:center;padding:80px 32px 60px;
-  background:linear-gradient(160deg,#fff8ff 0%,#f0f4ff 50%,#f0fff8 100%);
-  position:relative;overflow:hidden;
-}
-.hero::before{
-  content:'⬡';position:absolute;font-size:400px;opacity:0.04;
-  top:-80px;left:50%;transform:translateX(-50%);
-  background:linear-gradient(135deg,var(--pink),var(--blue));
-  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
-}
-.hero-badge{
-  display:inline-block;padding:6px 16px;border-radius:20px;
-  background:linear-gradient(135deg,#ffeef5,#eef0ff);
-  border:1.5px solid #ddd8ff;
-  font-size:13px;font-weight:700;color:var(--blue);
-  margin-bottom:24px;letter-spacing:0.03em;
-}
-.hero h1{
-  font-size:clamp(36px,6vw,72px);font-weight:900;line-height:1.1;
-  letter-spacing:-0.04em;margin-bottom:20px;
-}
-.grad-text{
-  background:linear-gradient(135deg,var(--pink) 0%,var(--orange) 35%,var(--blue) 70%,var(--purple) 100%);
-  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
-}
-.hero p{font-size:18px;color:var(--ink2);max-width:560px;margin:0 auto 40px;line-height:1.7;font-weight:600;}
+.panel{background:var(--white);border-radius:16px;padding:20px;border:2px solid var(--border);box-shadow:0 2px 12px rgba(0,0,0,0.05);}
+.panel-title{font-size:14px;font-weight:800;margin-bottom:14px;}
 
-.hero-stats{
-  display:flex;justify-content:center;gap:16px;flex-wrap:wrap;margin-bottom:48px;
-}
-.hero-stat{
-  background:var(--white);border-radius:16px;padding:20px 28px;
-  border:2px solid var(--border);box-shadow:0 4px 16px rgba(0,0,0,0.06);
-  text-align:center;min-width:120px;
-}
-.hero-stat-val{font-size:32px;font-weight:900;line-height:1;}
-.hero-stat-label{font-size:12px;font-weight:700;color:var(--ink2);margin-top:4px;text-transform:uppercase;letter-spacing:0.05em;}
+label.lbl{display:block;font-size:11px;font-weight:800;color:var(--ink2);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:5px;}
+input[type=text],select{width:100%;padding:10px 14px;border-radius:10px;border:2px solid var(--border);background:var(--bg);font-family:var(--sans);font-size:14px;font-weight:600;color:var(--ink);outline:none;transition:border-color 0.2s;}
+input[type=text]:focus,select:focus{border-color:var(--blue);}
+.field{margin-bottom:14px;}
 
-/* ── Problem/Solution cards ── */
-.ps-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:20px;margin-bottom:32px;}
-@media(max-width:700px){.ps-grid{grid-template-columns:1fr;}}
-.ps-card{
-  border-radius:20px;padding:28px;border:2px solid;
-  transition:transform 0.2s,box-shadow 0.2s;
-}
-.ps-card:hover{transform:translateY(-4px);box-shadow:0 12px 32px rgba(0,0,0,0.1);}
-.ps-card.bad{background:#fff5f7;border-color:#ffcdd8;}
-.ps-card.mid{background:#fffbf0;border-color:#fde68a;}
-.ps-card.good{background:#f0fdf9;border-color:#a7f3d0;}
-.ps-icon{font-size:36px;margin-bottom:12px;}
-.ps-title{font-size:16px;font-weight:800;margin-bottom:8px;}
-.ps-card.bad .ps-title{color:#be123c;}
-.ps-card.mid .ps-title{color:#92400e;}
-.ps-card.good .ps-title{color:#065f46;}
-.ps-desc{font-size:13px;color:var(--ink2);line-height:1.6;font-weight:600;}
-.ps-items{margin-top:12px;display:flex;flex-direction:column;gap:4px;}
-.ps-item{font-size:12px;font-weight:700;padding:4px 0;}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:14px;}
+.chip{padding:4px 12px;border-radius:16px;font-size:12px;font-weight:700;cursor:pointer;border:1.5px solid;background:transparent;transition:all 0.15s;}
+.chip:hover{transform:scale(1.04);}
+.c-teal{border-color:var(--teal);color:#0891b2;}.c-teal:hover{background:#e0f7fa;}
+.c-pink{border-color:var(--pink);color:var(--pink);}.c-pink:hover{background:#ffeef5;}
+.c-blue{border-color:var(--blue);color:var(--blue);}.c-blue:hover{background:#eef0ff;}
+.c-green{border-color:var(--green);color:#059669;}.c-green:hover{background:#e8fdf7;}
+.c-orange{border-color:var(--orange);color:#c05621;}.c-orange:hover{background:#fff8f0;}
 
-/* ── Section headers ── */
-.section-label{
-  display:inline-flex;align-items:center;gap:8px;
-  font-size:12px;font-weight:800;letter-spacing:0.1em;text-transform:uppercase;
-  margin-bottom:12px;
-}
-.section-title{font-size:28px;font-weight:900;letter-spacing:-0.02em;margin-bottom:8px;}
-.section-sub{font-size:15px;color:var(--ink2);font-weight:600;line-height:1.6;margin-bottom:32px;}
-
-/* ── QUERY PAGE ── */
-.query-layout{display:grid;grid-template-columns:340px 1fr;gap:24px;align-items:start;}
-@media(max-width:900px){.query-layout{grid-template-columns:1fr;}}
-
-.panel{
-  background:var(--white);border-radius:20px;padding:24px;
-  border:2px solid var(--border);box-shadow:0 4px 20px rgba(0,0,0,0.06);
-}
-.panel-title{font-size:15px;font-weight:800;margin-bottom:16px;display:flex;align-items:center;gap:8px;}
-
-label.field-label{display:block;font-size:12px;font-weight:800;color:var(--ink2);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:6px;}
-input[type=text],select{
-  width:100%;padding:12px 16px;border-radius:12px;
-  border:2px solid var(--border);background:var(--bg);
-  font-family:var(--sans);font-size:14px;font-weight:600;color:var(--ink);
-  outline:none;transition:border-color 0.2s,box-shadow 0.2s;
-}
-input[type=text]:focus,select:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(67,97,238,0.12);}
-.field{margin-bottom:16px;}
-
-.quick-chips{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:20px;}
-.chip{
-  padding:5px 12px;border-radius:20px;font-size:12px;font-weight:700;
-  cursor:pointer;border:1.5px solid;transition:all 0.15s;
-  background:transparent;
-}
-.chip:hover{transform:scale(1.05);}
-.chip-pink{border-color:var(--pink);color:var(--pink);}  .chip-pink:hover{background:#ffeef5;}
-.chip-blue{border-color:var(--blue);color:var(--blue);}  .chip-blue:hover{background:#eef0ff;}
-.chip-green{border-color:var(--green);color:#059669;}    .chip-green:hover{background:#e8fdf7;}
-.chip-orange{border-color:var(--orange);color:#c05621;} .chip-orange:hover{background:#fff8f0;}
-
-.mode-group{display:flex;flex-direction:column;gap:6px;margin-bottom:20px;}
-.mode-btn{
-  padding:10px 16px;border-radius:12px;border:2px solid var(--border);
-  background:transparent;font-family:var(--sans);font-size:13px;font-weight:700;
-  cursor:pointer;text-align:left;transition:all 0.15s;color:var(--ink);
-  display:flex;align-items:center;gap:8px;
-}
+.mode-group{display:flex;flex-direction:column;gap:6px;margin-bottom:14px;}
+.mode-btn{padding:9px 14px;border-radius:10px;border:2px solid var(--border);background:transparent;font-family:var(--sans);font-size:13px;font-weight:700;cursor:pointer;text-align:left;transition:all 0.15s;color:var(--ink);display:flex;align-items:center;gap:8px;}
 .mode-btn:hover{border-color:var(--blue);background:#f5f7ff;}
-.mode-btn.sel-hybrid{border-color:var(--teal);background:#e8fbff;color:#0891b2;}
-.mode-btn.sel-distributed{border-color:var(--orange);background:#fff8f0;color:#c05621;}
-.mode-btn.sel-centralized{border-color:var(--purple);background:#f8f0ff;color:var(--purple);}
-.mode-btn.sel-all{border-color:var(--blue);background:#eef0ff;color:var(--blue);}
+.m-all{border-color:var(--blue);background:#eef0ff;color:var(--blue);}
+.m-hybrid{border-color:var(--teal);background:#e0f7fa;color:#0891b2;}
+.m-distributed{border-color:var(--orange);background:#fff8f0;color:#c05621;}
+.m-centralized{border-color:var(--purple);background:#f5f0ff;color:var(--purple);}
 
-.run-btn{
-  width:100%;padding:14px;border-radius:14px;border:none;
-  background:linear-gradient(135deg,var(--blue),var(--purple));
-  color:#fff;font-family:var(--sans);font-size:15px;font-weight:800;
-  cursor:pointer;box-shadow:0 6px 20px rgba(67,97,238,0.35);
-  transition:all 0.2s;letter-spacing:0.02em;
-}
-.run-btn:hover{transform:translateY(-2px);box-shadow:0 10px 28px rgba(67,97,238,0.4);}
-.run-btn:active{transform:translateY(0);}
+.run-btn{width:100%;padding:12px;border-radius:12px;border:none;background:linear-gradient(135deg,var(--blue),var(--purple));color:#fff;font-family:var(--sans);font-size:14px;font-weight:800;cursor:pointer;box-shadow:0 4px 16px rgba(67,97,238,0.3);transition:all 0.2s;}
+.run-btn:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(67,97,238,0.35);}
 
-/* ── Result cards ── */
-.results-area{display:flex;flex-direction:column;gap:16px;}
-.result-panel{
-  border-radius:20px;padding:24px;border:2px solid;
-  transition:all 0.3s;
-}
-.result-panel.hybrid-panel{background:#f0feff;border-color:#a5f3fc;}
-.result-panel.dist-panel{background:#fff8f0;border-color:#fed7aa;}
-.result-panel.cent-panel{background:#fdf4ff;border-color:#e9d5ff;}
+.query-layout{display:grid;grid-template-columns:300px 1fr;gap:20px;align-items:start;}
+@media(max-width:860px){.query-layout{grid-template-columns:1fr;}}
 
-.rp-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;flex-wrap:wrap;gap:8px;}
-.rp-mode{font-size:16px;font-weight:800;}
-.rp-stats{display:flex;gap:10px;flex-wrap:wrap;}
-.rp-stat{
-  font-family:var(--mono);font-size:12px;font-weight:600;
-  padding:4px 10px;border-radius:8px;border:1.5px solid;
-}
-.stat-teal{background:#e0f7fa;border-color:#80deea;color:#00838f;}
-.stat-orange{background:#fff8f0;border-color:#ffcc80;color:#e65100;}
-.stat-purple{background:#fdf4ff;border-color:#ce93d8;color:#7b1fa2;}
-.stat-green{background:#e8f5e9;border-color:#a5d6a7;color:#2e7d32;}
-.stat-red{background:#ffebee;border-color:#ef9a9a;color:#c62828;}
-
-.result-items{display:flex;flex-direction:column;gap:6px;}
-.result-item{
-  background:white;border-radius:10px;padding:10px 14px;
-  display:flex;align-items:flex-start;gap:10px;
-  border:1.5px solid rgba(0,0,0,0.06);
-  font-size:13px;
-}
-.ri-id{font-family:var(--mono);font-size:11px;font-weight:600;margin-top:1px;flex-shrink:0;}
+.results-area{display:flex;flex-direction:column;gap:14px;}
+.result-panel{border-radius:16px;padding:20px;border:2px solid;}
+.rp-hybrid{background:#f0feff;border-color:#a5f3fc;}
+.rp-distributed{background:#fff8f0;border-color:#fed7aa;}
+.rp-centralized{background:#fdf4ff;border-color:#e9d5ff;}
+.rp-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;flex-wrap:wrap;gap:8px;}
+.rp-mode{font-size:15px;font-weight:800;}
+.rp-stats{display:flex;gap:8px;flex-wrap:wrap;}
+.rp-stat{font-family:var(--mono);font-size:11px;font-weight:600;padding:3px 9px;border-radius:7px;border:1.5px solid;}
+.s-teal{background:#e0f7fa;border-color:#80deea;color:#00838f;}
+.s-orange{background:#fff3e0;border-color:#ffcc80;color:#e65100;}
+.s-purple{background:#f3e5f5;border-color:#ce93d8;color:#7b1fa2;}
+.s-green{background:#e8f5e9;border-color:#a5d6a7;color:#2e7d32;}
+.s-red{background:#ffebee;border-color:#ef9a9a;color:#c62828;}
+.result-item{background:white;border-radius:9px;padding:9px 12px;display:flex;align-items:flex-start;gap:9px;border:1.5px solid rgba(0,0,0,0.06);font-size:13px;margin-bottom:6px;}
+.ri-id{font-family:var(--mono);font-size:11px;font-weight:600;flex-shrink:0;margin-top:1px;}
 .ri-content{flex:1;color:var(--ink2);line-height:1.5;font-weight:600;}
-.ri-score{font-family:var(--mono);font-size:11px;color:#94a3b8;flex-shrink:0;margin-top:1px;}
-.empty-state{text-align:center;padding:32px;color:var(--ink2);font-weight:700;font-size:14px;}
+.ri-score{font-family:var(--mono);font-size:11px;color:#94a3b8;flex-shrink:0;}
+.empty-state{text-align:center;padding:28px;color:var(--ink2);font-weight:700;font-size:13px;}
 
-/* ── Node grid ── */
-.node-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-top:20px;}
-@media(max-width:700px){.node-grid{grid-template-columns:1fr 1fr;}}
-.node-card{
-  background:var(--white);border-radius:16px;padding:16px;
-  border:2px solid var(--border);transition:all 0.3s;
-}
-.node-card.active{border-color:var(--green);background:#f0fdf9;box-shadow:0 4px 16px rgba(6,214,160,0.15);}
-.node-card.queried{
-  border-color:var(--teal);background:#f0feff;
-  box-shadow:0 0 0 4px rgba(12,180,206,0.15);
-  animation:nPulse 0.5s ease-out;
-}
-@keyframes nPulse{0%{box-shadow:0 0 0 0 rgba(12,180,206,0.5);}100%{box-shadow:0 0 0 16px rgba(12,180,206,0);}}
-.node-name{font-family:var(--mono);font-size:12px;font-weight:600;color:var(--blue);margin-bottom:10px;display:flex;align-items:center;gap:6px;}
-.dot{width:7px;height:7px;border-radius:50%;background:var(--green);box-shadow:0 0 5px var(--green);}
-.mini-bar-wrap{margin-bottom:6px;}
-.mini-bar-label{display:flex;justify-content:space-between;font-size:10px;font-weight:700;color:var(--ink2);margin-bottom:3px;}
-.mini-bar-track{height:5px;background:var(--border);border-radius:3px;overflow:hidden;}
-.mini-bar-fill{height:100%;border-radius:3px;transition:width 0.5s ease;}
-.fill-teal{background:linear-gradient(90deg,var(--teal),var(--green));}
-.fill-blue{background:linear-gradient(90deg,var(--blue),var(--purple));}
-
-/* ── BENCHMARKS PAGE ── */
-.bench-tabs{display:flex;gap:8px;margin-bottom:24px;flex-wrap:wrap;}
-.bench-tab{
-  padding:10px 22px;border-radius:24px;font-size:13px;font-weight:800;
-  cursor:pointer;border:2px solid var(--border);background:var(--white);
-  color:var(--ink2);transition:all 0.2s;
-}
-.bench-tab:hover{border-color:var(--blue);color:var(--blue);}
-.bench-tab.active{background:var(--ink);color:#fff;border-color:var(--ink);box-shadow:0 4px 12px rgba(26,26,46,0.2);}
-
-.bench-content{display:none;}
-.bench-content.active{display:block;}
-
-.chart-card{
-  background:var(--white);border-radius:20px;padding:28px;
-  border:2px solid var(--border);box-shadow:0 4px 20px rgba(0,0,0,0.06);
-  margin-bottom:20px;
-}
-.chart-title{font-size:18px;font-weight:800;margin-bottom:4px;}
-.chart-desc{font-size:13px;color:var(--ink2);font-weight:600;margin-bottom:20px;line-height:1.6;}
-canvas{display:block;width:100%;}
-.legend{display:flex;gap:20px;margin-bottom:16px;flex-wrap:wrap;}
-.legend-item{display:flex;align-items:center;gap:6px;font-size:13px;font-weight:700;}
-.leg-dot{width:14px;height:14px;border-radius:50%;}
-
-.insight{
-  background:linear-gradient(135deg,#f0f4ff,#f8f0ff);
-  border:2px solid #ddd8ff;border-radius:14px;padding:16px 20px;
-  font-size:13px;font-weight:600;color:var(--ink2);line-height:1.7;margin-top:16px;
-}
-.insight strong{color:var(--blue);}
-
-/* summary stat row */
-.sum-row{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:24px;}
-@media(max-width:700px){.sum-row{grid-template-columns:1fr;}}
-.sum-card{
-  border-radius:18px;padding:22px;border:2px solid;text-align:center;
-}
-.sum-card.s-teal{background:#f0feff;border-color:#a5f3fc;}
-.sum-card.s-orange{background:#fff8f0;border-color:#fed7aa;}
-.sum-card.s-purple{background:#fdf4ff;border-color:#e9d5ff;}
-.sum-val{font-family:var(--mono);font-size:28px;font-weight:700;margin-bottom:4px;}
-.s-teal .sum-val{color:#0891b2;}
-.s-orange .sum-val{color:#ea580c;}
-.s-purple .sum-val{color:var(--purple);}
-.sum-label{font-size:12px;font-weight:800;color:var(--ink2);text-transform:uppercase;letter-spacing:0.05em;}
-
-/* compare table */
 .cmp-table{width:100%;border-collapse:collapse;font-size:13px;}
-.cmp-table th{
-  background:#f8f8ff;font-size:11px;font-weight:800;letter-spacing:0.08em;
-  text-transform:uppercase;color:var(--ink2);padding:12px 14px;
-  border-bottom:2px solid var(--border);text-align:left;
-}
-.cmp-table td{padding:12px 14px;border-bottom:1px solid var(--border);font-weight:600;}
+.cmp-table th{background:#f8f8ff;font-size:11px;font-weight:800;letter-spacing:0.08em;text-transform:uppercase;color:var(--ink2);padding:10px 14px;border-bottom:2px solid var(--border);text-align:left;}
+.cmp-table td{padding:10px 14px;border-bottom:1px solid var(--border);font-weight:600;}
 .cmp-table tr:last-child td{border:none;}
 .cmp-table tr:hover td{background:#f9f9ff;}
 
-/* ── LOG ── */
-.log-box{
-  background:var(--white);border-radius:16px;padding:16px;
-  border:2px solid var(--border);font-family:var(--mono);font-size:12px;
-  max-height:280px;overflow-y:auto;
-}
-.log-entry{padding:6px 0;border-bottom:1px solid var(--border);display:flex;gap:12px;align-items:flex-start;}
-.log-entry:last-child{border:none;}
-.log-time{color:#94a3b8;flex-shrink:0;}
-.log-tag{font-weight:600;flex-shrink:0;padding:1px 6px;border-radius:4px;font-size:11px;}
-.log-hybrid{background:#e0f7fa;color:#00838f;}
-.log-distributed{background:#fff3e0;color:#e65100;}
-.log-centralized{background:#f3e5f5;color:#7b1fa2;}
-.log-sys{background:#e8f5e9;color:#2e7d32;}
-.log-msg{color:var(--ink2);}
+.trend-card{background:var(--white);border-radius:16px;padding:20px;border:2px solid var(--border);box-shadow:0 2px 12px rgba(0,0,0,0.05);margin-top:16px;}
 
-/* ── EXPLORER PAGE ── */
-.exp-grid{display:grid;grid-template-columns:320px 1fr;gap:24px;}
-@media(max-width:900px){.exp-grid{grid-template-columns:1fr;}}
+.node-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:14px;}
+@media(max-width:700px){.node-grid{grid-template-columns:1fr 1fr;}}
+.node-card{background:var(--white);border-radius:12px;padding:14px;border:2px solid var(--border);transition:all 0.3s;}
+.node-card.queried{border-color:var(--teal);background:#f0feff;box-shadow:0 0 0 4px rgba(12,180,206,0.12);animation:nPulse 0.5s ease-out;}
+@keyframes nPulse{0%{box-shadow:0 0 0 0 rgba(12,180,206,0.5);}100%{box-shadow:0 0 0 16px rgba(12,180,206,0);}}
+.node-name{font-family:var(--mono);font-size:11px;font-weight:600;color:var(--blue);margin-bottom:8px;display:flex;align-items:center;gap:5px;}
+.ndot{width:6px;height:6px;border-radius:50%;background:var(--green);box-shadow:0 0 5px var(--green);}
+.mini-bar-wrap{margin-bottom:5px;}
+.mini-bar-label{display:flex;justify-content:space-between;font-size:10px;font-weight:700;color:var(--ink2);margin-bottom:2px;}
+.mini-bar-track{height:4px;background:var(--border);border-radius:3px;overflow:hidden;}
+.mini-bar-fill{height:100%;border-radius:3px;transition:width 0.5s;}
+.fill-teal{background:linear-gradient(90deg,var(--teal),var(--green));}
+.fill-blue{background:linear-gradient(90deg,var(--blue),var(--purple));}
 
-.tag-badge{
-  display:inline-block;padding:2px 8px;border-radius:6px;
-  font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:0.06em;
-  margin-left:6px;
-}
+.bench-tabs{display:flex;gap:8px;margin-bottom:20px;flex-wrap:wrap;}
+.bench-tab{padding:8px 20px;border-radius:20px;font-size:13px;font-weight:800;cursor:pointer;border:2px solid var(--border);background:var(--white);color:var(--ink2);transition:all 0.2s;}
+.bench-tab:hover{border-color:var(--blue);color:var(--blue);}
+.bench-tab.active{background:var(--ink);color:#fff;border-color:var(--ink);}
+.bench-content{display:none;}.bench-content.active{display:block;}
+.chart-card{background:var(--white);border-radius:16px;padding:24px;border:2px solid var(--border);box-shadow:0 2px 12px rgba(0,0,0,0.05);margin-bottom:16px;}
+.chart-title{font-size:16px;font-weight:800;margin-bottom:4px;}
+.chart-desc{font-size:13px;color:var(--ink2);font-weight:600;margin-bottom:16px;line-height:1.6;}
+canvas{display:block;width:100%;}
+.legend{display:flex;gap:18px;margin-bottom:14px;flex-wrap:wrap;}
+.legend-item{display:flex;align-items:center;gap:6px;font-size:13px;font-weight:700;}
+.leg-dot{width:12px;height:12px;border-radius:50%;}
+.insight{background:linear-gradient(135deg,#f0f4ff,#f8f0ff);border:2px solid #ddd8ff;border-radius:12px;padding:14px 18px;font-size:13px;font-weight:600;color:var(--ink2);line-height:1.7;margin-top:14px;}
+.insight strong{color:var(--blue);}
+.sum-row{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:20px;}
+@media(max-width:700px){.sum-row{grid-template-columns:1fr;}}
+.sum-card{border-radius:14px;padding:18px;border:2px solid;text-align:center;}
+.s-card-teal{background:#f0feff;border-color:#a5f3fc;}.s-card-orange{background:#fff8f0;border-color:#fed7aa;}.s-card-purple{background:#fdf4ff;border-color:#e9d5ff;}
+.sum-val{font-family:var(--mono);font-size:24px;font-weight:700;margin-bottom:4px;}
+.s-card-teal .sum-val{color:#0891b2;}.s-card-orange .sum-val{color:#ea580c;}.s-card-purple .sum-val{color:var(--purple);}
+.sum-label{font-size:11px;font-weight:800;color:var(--ink2);text-transform:uppercase;letter-spacing:0.05em;}
 
-/* ── Latency chart ── */
-.lat-trend{
-  background:var(--white);border-radius:20px;padding:24px;
-  border:2px solid var(--border);box-shadow:0 4px 20px rgba(0,0,0,0.06);
-  margin-top:24px;
-}
+.exp-grid{display:grid;grid-template-columns:280px 1fr;gap:20px;}
+@media(max-width:860px){.exp-grid{grid-template-columns:1fr;}}
 
-/* ── Scrollbar ── */
-::-webkit-scrollbar{width:6px;height:6px;}
-::-webkit-scrollbar-track{background:var(--bg);}
-::-webkit-scrollbar-thumb{background:var(--border);border-radius:3px;}
-::-webkit-scrollbar-thumb:hover{background:#ccc;}
+::-webkit-scrollbar{width:5px;height:5px;}::-webkit-scrollbar-track{background:var(--bg);}::-webkit-scrollbar-thumb{background:var(--border);border-radius:3px;}
 </style>
 </head>
 <body>
 
-<!-- ── NAV ── -->
 <nav>
   <div class="nav-brand">⬡ HybridIndex</div>
   <div class="nav-links">
-    <button class="nav-link active" onclick="goPage('home',this)">🏠 Overview</button>
-    <button class="nav-link" onclick="goPage('query',this)">🔍 Query</button>
+    <button class="nav-link active" onclick="goPage('query',this)">🔍 Query</button>
     <button class="nav-link" onclick="goPage('bench',this)">📊 Benchmarks</button>
     <button class="nav-link" onclick="goPage('explore',this)">🗃️ Explorer</button>
-    <button class="nav-link" onclick="goPage('log',this)">📋 Log</button>
-  </div>
-  <div class="nav-team">
-    <span class="pill pill-pink">Shahbaz</span>
-    <span class="pill pill-blue">Piyusha</span>
-    <span class="pill pill-green">Rameez</span>
   </div>
 </nav>
 
-<!-- ══════════════════════════════════════════════════════
-     PAGE 1: HOME / OVERVIEW
-══════════════════════════════════════════════════════ -->
-<div class="page active" id="page-home">
-  <div class="hero">
-    <div class="hero-badge">CS63016 · Kent State University · Big Data Systems</div>
-    <h1>The <span class="grad-text">Hybrid Indexing</span><br>System</h1>
-    <p>Smarter search through large-scale data — combining the best of centralized and distributed approaches.</p>
-    <div class="hero-stats">
-      <div class="hero-stat">
-        <div class="hero-stat-val" style="color:var(--pink)">4×</div>
-        <div class="hero-stat-label">Faster than centralized</div>
-      </div>
-      <div class="hero-stat">
-        <div class="hero-stat-val" style="color:var(--blue)">62</div>
-        <div class="hero-stat-label">Queries per second</div>
-      </div>
-      <div class="hero-stat">
-        <div class="hero-stat-val" style="color:var(--green)">20%</div>
-        <div class="hero-stat-label">Less node overhead</div>
-      </div>
-      <div class="hero-stat">
-        <div class="hero-stat-val" style="color:var(--orange)">1000+</div>
-        <div class="hero-stat-label">Documents tested</div>
-      </div>
-    </div>
-  </div>
-
+<!-- QUERY PAGE -->
+<div class="page active" id="page-query">
   <div class="container">
-    <div class="section-label"><span style="color:var(--pink)">●</span> The Problem</div>
-    <div class="section-title">Why existing approaches fall short</div>
-    <div class="section-sub">Every large-scale system that stores data needs an index to find it quickly. But today's solutions force a tradeoff.</div>
-
-    <div class="ps-grid">
-      <div class="ps-card bad">
-        <div class="ps-icon">🏚️</div>
-        <div class="ps-title">Centralized Index</div>
-        <div class="ps-desc">One server holds the entire index. Simple to manage, but crashes under load — every query competes for the same bottleneck.</div>
-        <div class="ps-items">
-          <div style="color:#be123c;font-size:12px;font-weight:700;">✗ Single point of failure</div>
-          <div style="color:#be123c;font-size:12px;font-weight:700;">✗ Latency grows with data</div>
-          <div style="color:#be123c;font-size:12px;font-weight:700;">✗ Can't scale horizontally</div>
-        </div>
-      </div>
-      <div class="ps-card mid">
-        <div class="ps-icon">📡</div>
-        <div class="ps-title">Distributed Index</div>
-        <div class="ps-desc">Data is spread across many nodes. Scalable, but every query gets broadcast to ALL nodes — most of which have nothing relevant.</div>
-        <div class="ps-items">
-          <div style="color:#059669;font-size:12px;font-weight:700;">✓ Horizontally scalable</div>
-          <div style="color:#92400e;font-size:12px;font-weight:700;">✗ Wastes network bandwidth</div>
-          <div style="color:#92400e;font-size:12px;font-weight:700;">✗ High coordination cost</div>
-        </div>
-      </div>
-      <div class="ps-card good">
-        <div class="ps-icon">⬡</div>
-        <div class="ps-title">Hybrid (Proposed)</div>
-        <div class="ps-desc">A metadata layer acts as a smart directory — routing each query only to the nodes that hold relevant data. Fast AND scalable.</div>
-        <div class="ps-items">
-          <div style="color:#065f46;font-size:12px;font-weight:700;">✓ Metadata-driven routing</div>
-          <div style="color:#065f46;font-size:12px;font-weight:700;">✓ Reduced communication</div>
-          <div style="color:#065f46;font-size:12px;font-weight:700;">✓ Parallel + targeted</div>
-        </div>
-      </div>
-    </div>
-
-    <div style="margin-top:48px;">
-      <div class="section-label"><span style="color:var(--blue)">●</span> Architecture</div>
-      <div class="section-title">How the hybrid system works</div>
-    </div>
-
-    <div class="panel" style="margin-bottom:24px;">
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:32px;">
-        <div>
-          <div style="font-size:14px;font-weight:800;margin-bottom:16px;color:var(--blue);">🔄 Query Flow</div>
-          <div style="display:flex;flex-direction:column;gap:10px;">
-            <div style="background:#eef0ff;border-radius:12px;padding:12px 16px;border:2px solid #c7d2fe;">
-              <span style="font-size:12px;font-weight:800;color:var(--blue);">① CLIENT</span>
-              <div style="font-size:12px;color:var(--ink2);font-weight:600;margin-top:2px;">User submits a search query</div>
-            </div>
-            <div style="text-align:center;font-size:18px;color:var(--ink2);">↓</div>
-            <div style="background:#f0feff;border-radius:12px;padding:12px 16px;border:2px solid #a5f3fc;">
-              <span style="font-size:12px;font-weight:800;color:#0891b2;">② METADATA LAYER</span>
-              <div style="font-size:12px;color:var(--ink2);font-weight:600;margin-top:2px;">Looks up which nodes have relevant terms → returns targeted node list</div>
-            </div>
-            <div style="text-align:center;font-size:18px;color:var(--ink2);">↓</div>
-            <div style="background:#f0fdf9;border-radius:12px;padding:12px 16px;border:2px solid #a7f3d0;display:flex;gap:8px;flex-wrap:wrap;">
-              <span style="font-size:12px;font-weight:800;color:#059669;">③ RELEVANT NODES ONLY</span>
-              <div style="display:flex;gap:6px;margin-top:4px;flex-wrap:wrap;">
-                <span style="background:#dcfce7;border-radius:6px;padding:2px 8px;font-family:var(--mono);font-size:11px;color:#166534;">node_0</span>
-                <span style="background:#dcfce7;border-radius:6px;padding:2px 8px;font-family:var(--mono);font-size:11px;color:#166534;">node_2</span>
-                <span style="background:#f3f4f6;border-radius:6px;padding:2px 8px;font-family:var(--mono);font-size:11px;color:#9ca3af;">node_1 ✗</span>
-                <span style="background:#f3f4f6;border-radius:6px;padding:2px 8px;font-family:var(--mono);font-size:11px;color:#9ca3af;">node_3 ✗</span>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div>
-          <div style="font-size:14px;font-weight:800;margin-bottom:16px;color:var(--pink);">📦 Data Partitioning</div>
-          <div style="background:#fff8ff;border-radius:14px;padding:16px;border:2px solid #fce7f3;margin-bottom:16px;">
-            <div style="font-size:12px;font-weight:800;color:var(--pink);margin-bottom:8px;">Hash-based Partitioning</div>
-            <div style="font-size:12px;color:var(--ink2);font-weight:600;line-height:1.6;">Each document is assigned to a node using consistent hashing on its ID. This ensures even distribution and minimal rebalancing when nodes are added.</div>
-          </div>
-          <div style="background:#f0fff8;border-radius:14px;padding:16px;border:2px solid #a7f3d0;">
-            <div style="font-size:12px;font-weight:800;color:#059669;margin-bottom:8px;">Central Metadata Index</div>
-            <div style="font-size:12px;color:var(--ink2);font-weight:600;line-height:1.6;">Stores a lightweight mapping of <span style="font-family:var(--mono);font-size:11px;background:#dcfce7;padding:1px 5px;border-radius:3px;">term → {node_ids}</span> and <span style="font-family:var(--mono);font-size:11px;background:#dcfce7;padding:1px 5px;border-radius:3px;">doc → node</span>. Fast O(1) lookups — not a bottleneck.</div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div style="text-align:center;padding:16px;">
-      <button class="run-btn" style="max-width:300px;" onclick="goPage('query',document.querySelectorAll('.nav-link')[1])">🔍 Try It — Run a Query →</button>
-    </div>
-  </div>
-</div>
-
-<!-- ══════════════════════════════════════════════════════
-     PAGE 2: QUERY
-══════════════════════════════════════════════════════ -->
-<div class="page" id="page-query">
-  <div class="container">
-    <div class="section-label"><span style="color:var(--teal)">●</span> Interactive Demo</div>
-    <div class="section-title">Run a Live Query</div>
-    <div class="section-sub">Type any search term and compare all three approaches in real time.</div>
-
+    <div class="page-title">Run a Query</div>
+    <div class="page-sub">Compare Hybrid, Distributed, and Centralized indexing in real time.</div>
     <div class="query-layout">
-      <!-- Left: Controls -->
-      <div>
+      <div style="display:flex;flex-direction:column;gap:14px;">
         <div class="panel">
-          <div class="panel-title">⚙️ Query Settings</div>
-
+          <div class="panel-title">⚙️ Settings</div>
           <div class="field">
-            <label class="field-label">Search Query</label>
+            <label class="lbl">Search Query</label>
             <input type="text" id="queryInput" value="distributed indexing nodes" placeholder="Enter search terms...">
           </div>
-
           <div class="field">
-            <label class="field-label">Quick Picks</label>
-            <div class="quick-chips">
-              <button class="chip chip-teal" onclick="setQ('distributed indexing nodes')" style="border-color:var(--teal);color:#0891b2;">distributed indexing</button>
-              <button class="chip chip-pink" onclick="setQ('search engines inverted index')">search engines</button>
-              <button class="chip chip-blue" onclick="setQ('NoSQL databases')">NoSQL databases</button>
-              <button class="chip chip-green" onclick="setQ('Apache Spark big data')">Apache Spark</button>
-              <button class="chip chip-orange" onclick="setQ('fault tolerance replication')">fault tolerance</button>
+            <label class="lbl">Quick Picks</label>
+            <div class="chips">
+              <button class="chip c-teal" onclick="setQ('distributed indexing nodes')">distributed indexing</button>
+              <button class="chip c-pink" onclick="setQ('search engines inverted index')">search engines</button>
+              <button class="chip c-blue" onclick="setQ('NoSQL databases')">NoSQL</button>
+              <button class="chip c-green" onclick="setQ('Apache Spark big data')">Apache Spark</button>
+              <button class="chip c-orange" onclick="setQ('fault tolerance replication')">fault tolerance</button>
             </div>
           </div>
-
           <div class="field">
-            <label class="field-label">Number of Nodes</label>
+            <label class="lbl">Nodes</label>
             <select id="nodeCount" onchange="resetSystem()">
               <option value="2">2 Nodes</option>
               <option value="4" selected>4 Nodes</option>
@@ -534,222 +171,148 @@ canvas{display:block;width:100%;}
               <option value="8">8 Nodes</option>
             </select>
           </div>
-
           <div class="field">
-            <label class="field-label">Partitioning</label>
-            <select id="partStrat" onchange="resetSystem()">
-              <option value="hash">Hash-based (consistent hashing)</option>
-              <option value="range">Range-based</option>
-            </select>
-          </div>
-
-          <div class="field">
-            <label class="field-label">Run Mode</label>
-            <div class="mode-group" id="modeGroup">
-              <button class="mode-btn sel-all" onclick="selectMode('all',this)">🔀 Compare All Three</button>
-              <button class="mode-btn" onclick="selectMode('hybrid',this)">⬡ Hybrid Only</button>
-              <button class="mode-btn" onclick="selectMode('distributed',this)">◈ Distributed Only</button>
-              <button class="mode-btn" onclick="selectMode('centralized',this)">◎ Centralized Only</button>
+            <label class="lbl">Mode</label>
+            <div class="mode-group">
+              <button class="mode-btn m-all" onclick="selMode('all',this)">Compare All</button>
+              <button class="mode-btn" onclick="selMode('hybrid',this)">⬡ Hybrid Only</button>
+              <button class="mode-btn" onclick="selMode('distributed',this)">◈ Distributed Only</button>
+              <button class="mode-btn" onclick="selMode('centralized',this)">◎ Centralized Only</button>
             </div>
           </div>
-
           <button class="run-btn" onclick="runQuery()">▶ Run Query</button>
         </div>
-
-        <!-- Node status -->
-        <div class="panel" style="margin-top:16px;">
-          <div class="panel-title">🖥️ Node Status</div>
+        <div class="panel">
+          <div class="panel-title">Node Status</div>
           <div class="node-grid" id="nodeGrid" style="grid-template-columns:1fr 1fr;"></div>
         </div>
       </div>
 
-      <!-- Right: Results -->
       <div>
         <div class="results-area" id="resultsArea">
-          <div class="panel" style="text-align:center;padding:60px;">
-            <div style="font-size:48px;margin-bottom:16px;">🔍</div>
-            <div style="font-size:16px;font-weight:700;color:var(--ink2);">Run a query to see results here</div>
-            <div style="font-size:13px;color:#94a3b8;margin-top:6px;">Results from all three modes will appear side by side</div>
+          <div class="panel" style="text-align:center;padding:48px;">
+            <div style="font-size:40px;margin-bottom:12px;">🔍</div>
+            <div style="font-size:15px;font-weight:700;color:var(--ink2);">Run a query to see results</div>
+            <div style="font-size:12px;color:#94a3b8;margin-top:4px;">All three modes will appear side by side</div>
           </div>
         </div>
-
-        <!-- Latency trend -->
-        <div class="lat-trend" id="latTrend" style="display:none;">
-          <div style="font-size:15px;font-weight:800;margin-bottom:4px;">📈 Latency Trend</div>
-          <div style="font-size:12px;color:var(--ink2);font-weight:600;margin-bottom:16px;">How latency changes across queries</div>
+        <div id="compareWrap" style="display:none;margin-top:16px;">
+          <div class="panel">
+            <div class="panel-title">Comparison</div>
+            <div style="overflow-x:auto;"><table class="cmp-table" id="cmpTable"></table></div>
+          </div>
+        </div>
+        <div class="trend-card" id="trendCard" style="display:none;">
+          <div style="font-size:14px;font-weight:800;margin-bottom:4px;">Latency Trend</div>
+          <div style="font-size:12px;color:var(--ink2);font-weight:600;margin-bottom:14px;">Across all queries this session</div>
           <div class="legend">
             <div class="legend-item"><div class="leg-dot" style="background:var(--teal)"></div>Hybrid</div>
             <div class="legend-item"><div class="leg-dot" style="background:var(--orange)"></div>Distributed</div>
             <div class="legend-item"><div class="leg-dot" style="background:var(--purple)"></div>Centralized</div>
           </div>
-          <canvas id="trendChart" height="220"></canvas>
+          <canvas id="trendChart" height="200"></canvas>
         </div>
       </div>
     </div>
   </div>
 </div>
 
-<!-- ══════════════════════════════════════════════════════
-     PAGE 3: BENCHMARKS
-══════════════════════════════════════════════════════ -->
+<!-- BENCHMARKS PAGE -->
 <div class="page" id="page-bench">
   <div class="container">
-    <div class="section-label"><span style="color:var(--orange)">●</span> Performance Evaluation</div>
-    <div class="section-title">Benchmark Results</div>
-    <div class="section-sub">Testing across 1,000 documents and varying node counts to measure real-world performance differences.</div>
-
+    <div class="page-title">Benchmarks</div>
+    <div class="page-sub">Performance measured across 1,000 documents and varying node counts.</div>
     <div class="sum-row">
-      <div class="sum-card s-teal">
-        <div class="sum-val">67.6ms</div>
-        <div class="sum-label">⬡ Hybrid avg latency</div>
-      </div>
-      <div class="sum-card s-orange">
-        <div class="sum-val">71.0ms</div>
-        <div class="sum-label">◈ Distributed avg latency</div>
-      </div>
-      <div class="sum-card s-purple">
-        <div class="sum-val">5,014ms</div>
-        <div class="sum-label">◎ Centralized avg latency</div>
-      </div>
+      <div class="sum-card s-card-teal"><div class="sum-val">67.6ms</div><div class="sum-label">⬡ Hybrid (1000 docs)</div></div>
+      <div class="sum-card s-card-orange"><div class="sum-val">71.0ms</div><div class="sum-label">◈ Distributed (1000 docs)</div></div>
+      <div class="sum-card s-card-purple"><div class="sum-val">5,014ms</div><div class="sum-label">◎ Centralized (1000 docs)</div></div>
     </div>
-
     <div class="bench-tabs">
-      <button class="bench-tab active" onclick="switchBench('size',this)">📏 Latency vs Size</button>
-      <button class="bench-tab" onclick="switchBench('nodes',this)">🔢 Latency vs Nodes</button>
-      <button class="bench-tab" onclick="switchBench('routing',this)">🎯 Routing Efficiency</button>
-      <button class="bench-tab" onclick="switchBench('throughput',this)">⚡ Throughput</button>
+      <button class="bench-tab active" onclick="switchBench('size',this)">Latency vs Size</button>
+      <button class="bench-tab" onclick="switchBench('nodes',this)">Latency vs Nodes</button>
+      <button class="bench-tab" onclick="switchBench('routing',this)">Routing Efficiency</button>
+      <button class="bench-tab" onclick="switchBench('throughput',this)">Throughput</button>
     </div>
-
     <div class="bench-content active" id="bench-size">
       <div class="chart-card">
         <div class="chart-title">Latency vs Dataset Size</div>
-        <div class="chart-desc">Average query latency (ms) as the number of indexed documents grows from 100 to 1,000 — using 4 nodes.</div>
+        <div class="chart-desc">Average query latency as documents grow from 100 to 1,000 — 4 nodes fixed.</div>
         <div class="legend">
           <div class="legend-item"><div class="leg-dot" style="background:var(--teal)"></div>Hybrid</div>
           <div class="legend-item"><div class="leg-dot" style="background:var(--orange)"></div>Distributed</div>
           <div class="legend-item"><div class="leg-dot" style="background:var(--purple)"></div>Centralized (off-chart)</div>
         </div>
-        <canvas id="sizeChart" height="300"></canvas>
-        <div class="insight">
-          <strong>Key finding:</strong> Hybrid and Distributed scale linearly with data size. Centralized collapses — growing from 63ms at 100 docs to over <strong>5,000ms</strong> at 1,000 docs due to sequential scanning. Hybrid consistently stays ahead of Distributed by skipping irrelevant nodes.
-        </div>
+        <canvas id="sizeChart" height="280"></canvas>
+        <div class="insight"><strong>Finding:</strong> Hybrid and Distributed scale linearly. Centralized collapses to 5,014ms at 1,000 docs due to sequential scanning.</div>
       </div>
-      <div class="chart-card" style="overflow-x:auto;">
-        <table class="cmp-table" id="rawTable"></table>
-      </div>
+      <div class="chart-card" style="overflow-x:auto;"><table class="cmp-table" id="rawTable"></table></div>
     </div>
-
     <div class="bench-content" id="bench-nodes">
       <div class="chart-card">
         <div class="chart-title">Latency vs Node Count</div>
-        <div class="chart-desc">How adding more nodes affects query latency with 500 fixed documents.</div>
+        <div class="chart-desc">How adding more nodes affects query latency — 500 docs fixed.</div>
         <div class="legend">
           <div class="legend-item"><div class="leg-dot" style="background:var(--teal)"></div>Hybrid</div>
           <div class="legend-item"><div class="leg-dot" style="background:var(--orange)"></div>Distributed</div>
         </div>
-        <canvas id="nodesChart" height="300"></canvas>
-        <div class="insight">
-          <strong>Key finding:</strong> As node count grows, Distributed must broadcast to more nodes — coordination cost increases. Hybrid's routing overhead grows slower, maintaining a <strong>20–25% latency advantage</strong> at every scale.
-        </div>
+        <canvas id="nodesChart" height="280"></canvas>
+        <div class="insight"><strong>Finding:</strong> Hybrid stays <strong>20–25% faster</strong> than Distributed at every node count by skipping irrelevant nodes.</div>
       </div>
     </div>
-
     <div class="bench-content" id="bench-routing">
       <div class="chart-card">
-        <div class="chart-title">Routing Efficiency — Latency per Query Type</div>
-        <div class="chart-desc">Comparing Hybrid vs Distributed latency for 10 different query types (1,000 docs, 4 nodes).</div>
+        <div class="chart-title">Routing Efficiency per Query</div>
+        <div class="chart-desc">Hybrid vs Distributed latency for 10 query types — 1,000 docs, 4 nodes.</div>
         <div class="legend">
           <div class="legend-item"><div class="leg-dot" style="background:var(--teal)"></div>Hybrid</div>
           <div class="legend-item"><div class="leg-dot" style="background:var(--orange)"></div>Distributed</div>
         </div>
-        <canvas id="routingChart" height="340"></canvas>
-        <div class="insight">
-          <strong>Key finding:</strong> For targeted queries, Hybrid routes to <strong>1–2 nodes</strong> instead of all 4 — saving up to <strong>8% latency</strong> per query. Broader queries touching multiple topics still benefit from parallel targeted execution.
-        </div>
+        <canvas id="routingChart" height="300"></canvas>
+        <div class="insight"><strong>Finding:</strong> Hybrid saves 3–8% latency per query by routing to fewer nodes via the metadata layer.</div>
       </div>
     </div>
-
     <div class="bench-content" id="bench-throughput">
       <div class="chart-card">
         <div class="chart-title">Throughput — Queries per Second</div>
-        <div class="chart-desc">Effective throughput accounting for parallel execution and overhead.</div>
-        <canvas id="throughputChart" height="300"></canvas>
-        <div class="insight">
-          <strong>Key finding:</strong> Hybrid achieves <strong>62.2 q/s</strong> — over 2× the distributed baseline (29.6 q/s) and <strong>300×</strong> the centralized approach (0.2 q/s at 1,000 docs). The advantage compounds as dataset size grows.
-        </div>
+        <div class="chart-desc">Effective throughput at 1,000 documents.</div>
+        <canvas id="throughputChart" height="280"></canvas>
+        <div class="insight"><strong>Finding:</strong> Hybrid achieves <strong>62.2 q/s</strong> — 2× Distributed and 300× Centralized.</div>
       </div>
     </div>
   </div>
 </div>
 
-<!-- ══════════════════════════════════════════════════════
-     PAGE 4: EXPLORER
-══════════════════════════════════════════════════════ -->
+<!-- EXPLORER PAGE -->
 <div class="page" id="page-explore">
   <div class="container">
-    <div class="section-label"><span style="color:var(--green)">●</span> Index Structure</div>
-    <div class="section-title">Index Explorer</div>
-    <div class="section-sub">Browse the documents and terms stored on each distributed node.</div>
-
+    <div class="page-title">🗃️ Index Explorer</div>
+    <div class="page-sub">Browse documents stored on each node and look up any term in the index.</div>
     <div class="exp-grid">
-      <div>
-        <div class="panel" style="margin-bottom:16px;">
+      <div style="display:flex;flex-direction:column;gap:14px;">
+        <div class="panel">
           <div class="panel-title">🖥️ Select Node</div>
-          <div id="expNodeBtns" style="display:flex;flex-direction:column;gap:8px;"></div>
+          <div id="expNodeBtns" style="display:flex;flex-direction:column;gap:6px;"></div>
         </div>
         <div class="panel">
           <div class="panel-title">🔎 Term Lookup</div>
           <div class="field">
-            <label class="field-label">Search Term</label>
+            <label class="lbl">Term</label>
             <input type="text" id="termInput" placeholder="e.g. indexing, distributed..." oninput="lookupTerm()">
           </div>
           <div id="termResult" style="font-size:13px;font-weight:600;color:var(--ink2);"></div>
         </div>
       </div>
-
-      <div>
-        <div class="panel" id="nodeDocsPanel">
-          <div class="panel-title" id="nodeDocsTitle">📄 Select a node to browse its documents</div>
-          <div id="nodeDocsList"></div>
-        </div>
+      <div class="panel" id="nodeDocsPanel">
+        <div class="panel-title" id="nodeDocsTitle">📄 Select a node to see its documents</div>
+        <div id="nodeDocsList"></div>
       </div>
     </div>
   </div>
 </div>
 
-<!-- ══════════════════════════════════════════════════════
-     PAGE 5: LOG
-══════════════════════════════════════════════════════ -->
-<div class="page" id="page-log">
-  <div class="container">
-    <div class="section-label"><span style="color:var(--purple)">●</span> Activity</div>
-    <div class="section-title">System Log</div>
-    <div class="section-sub">A record of every query run in this session.</div>
-
-    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">
-      <div style="font-size:14px;font-weight:700;color:var(--ink2);" id="logCount">0 queries logged</div>
-      <button class="chip chip-pink" onclick="clearLog()" style="padding:8px 16px;">🗑️ Clear Log</button>
-    </div>
-
-    <div class="log-box" id="logBox">
-      <div class="log-entry">
-        <span class="log-time">00:00:00</span>
-        <span class="log-tag log-sys">SYS</span>
-        <span class="log-msg">System ready. 20 documents indexed. 4 nodes active.</span>
-      </div>
-    </div>
-
-    <div style="margin-top:24px;" id="logHistory"></div>
-  </div>
-</div>
-
-<!-- ══════════════════════════════════════════════════════
-     JAVASCRIPT
-══════════════════════════════════════════════════════ -->
 <script>
-// ── Data ──────────────────────────────────────────────────────────────────────
-const STOPWORDS = new Set(["a","an","the","is","in","of","and","or","to","for","with","on","at"]);
-function tokenize(t){return t.toLowerCase().split(/\s+/).filter(w=>/^[a-z]+$/.test(w)&&!STOPWORDS.has(w));}
+const SW=new Set(["a","an","the","is","in","of","and","or","to","for","with","on","at"]);
+function tok(t){return t.toLowerCase().split(/\s+/).filter(w=>/^[a-z]+$/.test(w)&&!SW.has(w));}
 function djb2(s){let h=5381;for(let i=0;i<s.length;i++)h=((h<<5)+h)+s.charCodeAt(i);return Math.abs(h);}
 
 const DOCS=[
@@ -778,441 +341,142 @@ const DOCS=[
 const CAT_COLORS={search:"#2563eb",database:"#e85d04",systems:"#059669",processing:"#7c3aed",iot:"#d97706",ml:"#db2777",adtech:"#0891b2"};
 const CAT_BG={search:"#eff6ff",database:"#fff7ed",systems:"#f0fdf9",processing:"#faf5ff",iot:"#fffbeb",ml:"#fdf2f8",adtech:"#f0f9ff"};
 
-// ── Index System ─────────────────────────────────────────────────────────────
 class Node{
   constructor(id){this.id=id;this.inv={};this.docs={};this.qc=0;}
-  add(doc){
-    this.docs[doc.id]=doc;
-    for(const t of tokenize(doc.content)){
-      if(!this.inv[t])this.inv[t]=[];
-      if(!this.inv[t].includes(doc.id))this.inv[t].push(doc.id);
-    }
-  }
-  search(terms){
-    const m=new Set();
-    for(const t of terms)for(const d of(this.inv[t]||[]))m.add(d);
-    this.qc++;
-    return[...m].map(d=>({docId:d,nodeId:this.id,score:Math.random()*0.4+0.6}));
-  }
+  add(doc){this.docs[doc.id]=doc;for(const t of tok(doc.content)){if(!this.inv[t])this.inv[t]=[];if(!this.inv[t].includes(doc.id))this.inv[t].push(doc.id);}}
+  search(terms){const m=new Set();for(const t of terms)for(const d of(this.inv[t]||[]))m.add(d);this.qc++;return[...m].map(d=>({docId:d,nodeId:this.id,score:Math.random()*0.4+0.6}));}
 }
 
 class HybridSys{
-  constructor(n,s){
-    this.n=n;this.s=s;
-    this.nodes={};
-    for(let i=0;i<n;i++)this.nodes[`node_${i}`]=new Node(`node_${i}`);
-    this.ids=Object.keys(this.nodes);
-    this.termNodes={};this.docNode={};
-    this.hist={h:[],d:[],c:[],q:[]};this.qTotal=0;
-  }
+  constructor(n){this.nodes={};for(let i=0;i<n;i++)this.nodes[`node_${i}`]=new Node(`node_${i}`);this.ids=Object.keys(this.nodes);this.tN={};this.hist={h:[],d:[],c:[],q:[]};this.qN=0;}
   assign(id){return this.ids[djb2(id)%this.ids.length];}
-  addDoc(doc){
-    const nid=this.assign(doc.id);
-    this.nodes[nid].add(doc);
-    this.docNode[doc.id]=nid;
-    for(const t of tokenize(doc.content)){
-      if(!this.termNodes[t])this.termNodes[t]=new Set();
-      this.termNodes[t].add(nid);
-    }
-  }
-  route(terms){const s=new Set();for(const t of terms)for(const n of(this.termNodes[t]||[]))s.add(n);return s;}
-  sim(mode,nq,total){
-    const base=5,scan=20*0.04,merge=nq*1.2;
-    if(mode==='hybrid')return base*nq+scan*nq+merge+Math.random()*6-3;
-    if(mode==='distributed')return base*total+scan*total+merge*1.5+Math.random()*10-5;
-    return 8+20*total*0.5*0.5+Math.random()*12-6;
-  }
-  hybrid(q){
-    const t=tokenize(q),tgt=this.route(t);
-    let res=[];for(const n of tgt)res=res.concat(this.nodes[n].search(t));
-    const lat=Math.max(this.sim('hybrid',tgt.size,this.ids.length),1);
-    this.hist.h.push(lat);this.hist.q.push(`Q${++this.qTotal}`);
-    return{results:res,nq:tgt.size,total:this.ids.length,lat,mode:'hybrid',queried:[...tgt]};
-  }
-  distributed(q){
-    const t=tokenize(q);let res=[];
-    for(const n of Object.values(this.nodes))res=res.concat(n.search(t));
-    const lat=Math.max(this.sim('distributed',this.ids.length,this.ids.length),1);
-    this.hist.d.push(lat);
-    return{results:res,nq:this.ids.length,total:this.ids.length,lat,mode:'distributed',queried:this.ids};
-  }
-  centralized(q){
-    const t=tokenize(q),res=this.nodes[this.ids[0]].search(t);
-    const lat=Math.max(this.sim('centralized',1,this.ids.length),1);
-    this.hist.c.push(lat);
-    return{results:res,nq:1,total:this.ids.length,lat,mode:'centralized',queried:[this.ids[0]]};
-  }
+  addDoc(doc){const nid=this.assign(doc.id);this.nodes[nid].add(doc);for(const t of tok(doc.content)){if(!this.tN[t])this.tN[t]=new Set();this.tN[t].add(nid);}}
+  route(terms){const s=new Set();for(const t of terms)for(const n of(this.tN[t]||[]))s.add(n);return s;}
+  sim(mode,nq,total){if(mode==='hybrid')return Math.max(5*nq+0.8*nq+nq*1.2+Math.random()*6-3,1);if(mode==='distributed')return Math.max(5*total+0.8*total+total*1.8+Math.random()*10-5,1);return Math.max(8+total*10+Math.random()*12-6,1);}
+  hybrid(q){const t=tok(q),tgt=this.route(t);let r=[];for(const n of tgt)r=r.concat(this.nodes[n].search(t));const lat=this.sim('hybrid',tgt.size,this.ids.length);this.hist.h.push(lat);this.hist.q.push(`Q${++this.qN}`);return{results:r,nq:tgt.size,total:this.ids.length,lat,queried:[...tgt]};}
+  distributed(q){const t=tok(q);let r=[];for(const n of Object.values(this.nodes))r=r.concat(n.search(t));const lat=this.sim('distributed',this.ids.length,this.ids.length);this.hist.d.push(lat);return{results:r,nq:this.ids.length,total:this.ids.length,lat,queried:this.ids};}
+  centralized(q){const t=tok(q),r=this.nodes[this.ids[0]].search(t);const lat=this.sim('centralized',1,this.ids.length);this.hist.c.push(lat);return{results:r,nq:1,total:this.ids.length,lat,queried:[this.ids[0]]};}
 }
 
-let sys=new HybridSys(4,'hash');
-DOCS.forEach(d=>sys.addDoc(d));
-let selectedMode='all';
+let sys=new HybridSys(4);DOCS.forEach(d=>sys.addDoc(d));
+let curMode='all';
 
-// ── Nav ───────────────────────────────────────────────────────────────────────
-function goPage(id,btn){
-  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
-  document.querySelectorAll('.nav-link').forEach(b=>b.classList.remove('active'));
-  document.getElementById('page-'+id).classList.add('active');
-  if(btn)btn.classList.add('active');
-  if(id==='explore')buildExplorer();
-  if(id==='bench')drawAllCharts();
-}
-
-// ── Query page ────────────────────────────────────────────────────────────────
+function goPage(id,btn){document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));document.querySelectorAll('.nav-link').forEach(b=>b.classList.remove('active'));document.getElementById('page-'+id).classList.add('active');if(btn)btn.classList.add('active');if(id==='explore')buildExplorer();if(id==='bench')setTimeout(drawAllCharts,50);}
 function setQ(q){document.getElementById('queryInput').value=q;}
-function selectMode(m,btn){
-  selectedMode=m;
-  document.querySelectorAll('.mode-btn').forEach(b=>{b.className='mode-btn';});
-  btn.className=`mode-btn sel-${m}`;
-}
-function resetSystem(){
-  const n=parseInt(document.getElementById('nodeCount').value);
-  sys=new HybridSys(n,'hash');
-  DOCS.forEach(d=>sys.addDoc(d));
-  renderNodes([]);
-  addLog('sys','System rebuilt with '+n+' nodes.');
-}
+function selMode(m,btn){curMode=m;document.querySelectorAll('.mode-btn').forEach(b=>b.className='mode-btn');btn.className=`mode-btn m-${m}`;}
+function resetSystem(){const n=parseInt(document.getElementById('nodeCount').value);sys=new HybridSys(n);DOCS.forEach(d=>sys.addDoc(d));renderNodes([]);}
 
 function runQuery(){
-  const q=document.getElementById('queryInput').value.trim();
-  if(!q)return;
-  const results={};
-  if(selectedMode==='all'||selectedMode==='hybrid')results.hybrid=sys.hybrid(q);
-  if(selectedMode==='all'||selectedMode==='distributed')results.distributed=sys.distributed(q);
-  if(selectedMode==='all'||selectedMode==='centralized')results.centralized=sys.centralized(q);
-
-  renderResults(results);
-  const queried=results.hybrid?.queried||results.distributed?.queried||results.centralized?.queried||[];
-  renderNodes(queried);
-
-  // Log entries
-  for(const[m,r]of Object.entries(results)){
-    addLog(m,`"${q}" → ${r.nq}/${r.total} nodes · ${r.results.length} results · ${r.lat.toFixed(1)}ms`);
-  }
-  updateLogCount();
-
-  // Show trend
-  document.getElementById('latTrend').style.display='block';
+  const q=document.getElementById('queryInput').value.trim();if(!q)return;
+  const res={};
+  if(curMode==='all'||curMode==='hybrid')res.hybrid=sys.hybrid(q);
+  if(curMode==='all'||curMode==='distributed')res.distributed=sys.distributed(q);
+  if(curMode==='all'||curMode==='centralized')res.centralized=sys.centralized(q);
+  renderResults(res);
+  renderNodes(res.hybrid?.queried||res.distributed?.queried||res.centralized?.queried||[]);
+  if(Object.keys(res).length>1)renderCompare(res);
+  document.getElementById('trendCard').style.display='block';
   drawTrend();
 }
 
+const MI={hybrid:{label:'⬡ Hybrid',cls:'rp-hybrid',sc:'s-teal',color:'#0891b2'},distributed:{label:'◈ Distributed',cls:'rp-distributed',sc:'s-orange',color:'#ea580c'},centralized:{label:'◎ Centralized',cls:'rp-centralized',sc:'s-purple',color:'#7c3aed'}};
+
 function renderResults(results){
-  const area=document.getElementById('resultsArea');
-  if(!Object.keys(results).length){return;}
-  const modeInfo={
-    hybrid:{label:'⬡ Hybrid',cls:'hybrid-panel',statCls:'stat-teal',color:'#0891b2'},
-    distributed:{label:'◈ Distributed',cls:'dist-panel',statCls:'stat-orange',color:'#ea580c'},
-    centralized:{label:'◎ Centralized',cls:'cent-panel',statCls:'stat-purple',color:'#7c3aed'},
-  };
-  area.innerHTML=Object.entries(results).map(([m,r])=>{
-    const mi=modeInfo[m];
-    const latColor=r.lat<60?'stat-green':r.lat<150?'stat-teal':'stat-red';
-    const items=r.results.slice(0,4).map(res=>{
-      const doc=DOCS.find(d=>d.id===res.docId);
-      return`<div class="result-item">
-        <span class="ri-id" style="color:${mi.color}">${res.docId}</span>
-        <span class="ri-content">${doc?doc.content.substring(0,65)+'…':res.docId}</span>
-        <span class="ri-score">${(res.score*100).toFixed(0)}%</span>
-      </div>`;
-    }).join('');
-    return`<div class="result-panel ${mi.cls}">
-      <div class="rp-header">
-        <span class="rp-mode" style="color:${mi.color}">${mi.label}</span>
-        <div class="rp-stats">
-          <span class="rp-stat ${latColor}">${r.lat.toFixed(1)}ms</span>
-          <span class="rp-stat ${mi.statCls}">${r.nq}/${r.total} nodes</span>
-          <span class="rp-stat stat-green">${r.results.length} results</span>
-        </div>
-      </div>
-      ${items||'<div class="empty-state">No matches found</div>'}
-    </div>`;
+  document.getElementById('resultsArea').innerHTML=Object.entries(results).map(([m,r])=>{
+    const mi=MI[m],latCls=r.lat<60?'s-green':r.lat<150?'s-teal':'s-red';
+    const items=r.results.slice(0,4).map(res=>{const doc=DOCS.find(d=>d.id===res.docId);return`<div class="result-item"><span class="ri-id" style="color:${mi.color}">${res.docId}</span><span class="ri-content">${doc?doc.content.substring(0,65)+'…':res.docId}</span><span class="ri-score">${(res.score*100).toFixed(0)}%</span></div>`;}).join('');
+    return`<div class="result-panel ${mi.cls}"><div class="rp-header"><span class="rp-mode" style="color:${mi.color}">${mi.label}</span><div class="rp-stats"><span class="rp-stat ${latCls}">${r.lat.toFixed(1)}ms</span><span class="rp-stat ${mi.sc}">${r.nq}/${r.total} nodes</span><span class="rp-stat s-green">${r.results.length} results</span></div></div>${items||'<div class="empty-state">No matches found</div>'}</div>`;
   }).join('');
+}
+
+function renderCompare(results){
+  document.getElementById('compareWrap').style.display='block';
+  document.getElementById('cmpTable').innerHTML=`<thead><tr><th>Mode</th><th>Nodes Queried</th><th>Latency</th><th>Results</th><th>Overhead</th></tr></thead><tbody>`+
+  Object.entries(results).map(([m,r])=>{const mi=MI[m],oh=m==='hybrid'?`${r.total-r.nq} nodes saved`:m==='distributed'?'Broadcast all':'Sequential scan';return`<tr><td><strong style="color:${mi.color}">${mi.label}</strong></td><td style="font-family:var(--mono)">${r.nq}/${r.total}</td><td style="font-family:var(--mono);color:${r.lat<60?'#059669':r.lat<150?'#0891b2':'#dc2626'}">${r.lat.toFixed(1)}ms</td><td style="font-family:var(--mono)">${r.results.length}</td><td style="font-size:12px;color:var(--ink2)">${oh}</td></tr>`;}).join('')+'</tbody>';
 }
 
 function renderNodes(queried=[]){
-  const grid=document.getElementById('nodeGrid');
-  grid.innerHTML=Object.entries(sys.nodes).map(([nid,node])=>{
+  document.getElementById('nodeGrid').innerHTML=Object.entries(sys.nodes).map(([nid,node])=>{
     const isQ=queried.includes(nid);
-    const docPct=Math.min(len(node.docs)/8*100,100);
-    const termPct=Math.min(Object.keys(node.inv).length/60*100,100);
-    return`<div class="node-card ${isQ?'queried':'active'}">
-      <div class="node-name"><span class="dot"></span>${nid}${isQ?'<span style="color:var(--teal);font-size:10px;margin-left:4px;">← hit</span>':''}</div>
-      <div class="mini-bar-wrap">
-        <div class="mini-bar-label"><span>Docs</span><span>${len(node.docs)}</span></div>
-        <div class="mini-bar-track"><div class="mini-bar-fill fill-teal" style="width:${docPct}%"></div></div>
-      </div>
-      <div class="mini-bar-wrap">
-        <div class="mini-bar-label"><span>Terms</span><span>${Object.keys(node.inv).length}</span></div>
-        <div class="mini-bar-track"><div class="mini-bar-fill fill-blue" style="width:${termPct}%"></div></div>
-      </div>
-      <div style="font-size:11px;color:#94a3b8;font-weight:700;margin-top:4px;">Queries: ${node.qc}</div>
-    </div>`;
+    return`<div class="node-card ${isQ?'queried':''}"><div class="node-name"><span class="ndot"></span>${nid}${isQ?'<span style="color:var(--teal);font-size:10px;margin-left:4px;">← hit</span>':''}</div><div class="mini-bar-wrap"><div class="mini-bar-label"><span>Docs</span><span>${Object.keys(node.docs).length}</span></div><div class="mini-bar-track"><div class="mini-bar-fill fill-teal" style="width:${Math.min(Object.keys(node.docs).length/8*100,100)}%"></div></div></div><div class="mini-bar-wrap"><div class="mini-bar-label"><span>Terms</span><span>${Object.keys(node.inv).length}</span></div><div class="mini-bar-track"><div class="mini-bar-fill fill-blue" style="width:${Math.min(Object.keys(node.inv).length/60*100,100)}%"></div></div></div><div style="font-size:10px;color:#94a3b8;font-weight:700;margin-top:3px">Queries: ${node.qc}</div></div>`;
   }).join('');
 }
-function len(o){return Object.keys(o).length;}
 
-// ── Log ───────────────────────────────────────────────────────────────────────
-let logCount=0;
-function addLog(mode,msg){
-  logCount++;
-  const box=document.getElementById('logBox');
-  const now=new Date();
-  const t=`${String(now.getHours()).padStart(2,'0')}:${String(now.getMinutes()).padStart(2,'0')}:${String(now.getSeconds()).padStart(2,'0')}`;
-  const tagClass=mode==='sys'?'log-sys':`log-${mode}`;
-  const tagLabel=mode==='sys'?'SYS':mode.toUpperCase();
-  const entry=document.createElement('div');entry.className='log-entry';
-  entry.innerHTML=`<span class="log-time">${t}</span><span class="log-tag ${tagClass}">${tagLabel}</span><span class="log-msg">${msg}</span>`;
-  box.appendChild(entry);box.scrollTop=box.scrollHeight;
-}
-function updateLogCount(){document.getElementById('logCount').textContent=`${logCount} log entries`;}
-function clearLog(){document.getElementById('logBox').innerHTML='';logCount=0;updateLogCount();}
-
-// ── Bench tabs ────────────────────────────────────────────────────────────────
-function switchBench(id,btn){
-  document.querySelectorAll('.bench-tab').forEach(b=>b.classList.remove('active'));
-  document.querySelectorAll('.bench-content').forEach(c=>c.classList.remove('active'));
-  btn.classList.add('active');
-  document.getElementById('bench-'+id).classList.add('active');
-  setTimeout(drawAllCharts,50);
-}
-
-// ── Charting ──────────────────────────────────────────────────────────────────
 const B1={sizes:[100,200,400,600,800,1000],hybrid:[26.4,31.7,41.9,51.8,59.9,67.6],distributed:[36.7,39.6,48.7,55.5,64.6,71.0]};
 const B2={nodes:[2,4,6,8,12,16],hybrid:[35.3,45.6,54.2,63.4,83.2,101.4],distributed:[38.3,53.2,65.5,80.6,105.5,133.4]};
-const B3={
-  labels:['dist. indexing','inverted index','NoSQL DB','Apache Spark','cons. hashing','query routing','stream proc.','fault tol.','ML recom.','IoT sensors'],
-  hybrid:[68.5,66.2,67.7,68.8,66.9,67.5,68.0,67.9,67.2,66.4],
-  dist:[71.6,70.5,71.7,70.6,71.6,69.7,73.1,73.7,72.3,70.6],
-};
+const B3={labels:['dist. indexing','inverted index','NoSQL DB','Apache Spark','hashing','routing','streaming','fault tol.','ML recom.','IoT'],hybrid:[68.5,66.2,67.7,68.8,66.9,67.5,68.0,67.9,67.2,66.4],dist:[71.6,70.5,71.7,70.6,71.6,69.7,73.1,73.7,72.3,70.6]};
 const B4={Hybrid:62.2,Distributed:29.6,Centralized:0.2};
+const TEAL='#0cb4ce',ORANGE='#ff9a3c',PURPLE='#7209b7',BLUE='#4361ee';
 
-const TEAL='#0cb4ce',ORANGE='#ff9a3c',PURPLE='#7209b7',BLUE='#4361ee',GREEN='#06d6a0';
+function setupC(id){const c=document.getElementById(id);if(!c)return null;c.width=c.parentElement.clientWidth-48;const g=c.getContext('2d');g.clearRect(0,0,c.width,c.height);return{c,g,W:c.width,H:c.height};}
 
-function setupC(id){
-  const c=document.getElementById(id);
-  if(!c)return null;
-  c.width=c.parentElement.clientWidth-56;
-  const g=c.getContext('2d');g.clearRect(0,0,c.width,c.height);
-  return{c,g,W:c.width,H:c.height};
+function drawLine(id,datasets,labels,maxY){
+  const r=setupC(id);if(!r)return;const{g,W,H}=r;const pad={t:16,r:20,b:40,l:52},cW=W-pad.l-pad.r,cH=H-pad.t-pad.b,n=labels.length;
+  for(let i=0;i<=5;i++){const y=pad.t+cH/5*i;g.strokeStyle='#ede8f5';g.lineWidth=1;g.beginPath();g.moveTo(pad.l,y);g.lineTo(W-pad.r,y);g.stroke();g.fillStyle='#94a3b8';g.font='10px Nunito';g.textAlign='right';g.fillText(Math.round(maxY-maxY/5*i)+'ms',pad.l-5,y+4);}
+  const xFn=i=>pad.l+(i/(n-1))*cW,yFn=v=>pad.t+cH-(Math.min(v,maxY)/maxY)*cH;
+  datasets.forEach(({data,color})=>{g.beginPath();g.strokeStyle=color;g.lineWidth=3;g.shadowBlur=10;g.shadowColor=color+'88';data.forEach((v,i)=>i===0?g.moveTo(xFn(i),yFn(v)):g.lineTo(xFn(i),yFn(v)));g.stroke();g.shadowBlur=0;data.forEach((v,i)=>{g.beginPath();g.arc(xFn(i),yFn(v),5,0,Math.PI*2);g.fillStyle=color;g.fill();g.strokeStyle='#fff';g.lineWidth=2;g.stroke();});});
+  labels.forEach((l,i)=>{g.fillStyle='#94a3b8';g.font='10px Nunito';g.textAlign='center';g.fillText(l,xFn(i),H-pad.b+14);});
 }
 
-function drawLineChart(canvasId,datasets,labels,maxY,xLabel){
-  const r=setupC(canvasId);if(!r)return;
-  const{g,W,H}=r;
-  const pad={t:20,r:24,b:48,l:56};
-  const cW=W-pad.l-pad.r,cH=H-pad.t-pad.b;
-  const n=labels.length;
-  // Grid
-  for(let i=0;i<=5;i++){
-    const y=pad.t+cH/5*i;
-    g.strokeStyle='#ede8f5';g.lineWidth=1;
-    g.beginPath();g.moveTo(pad.l,y);g.lineTo(W-pad.r,y);g.stroke();
-    g.fillStyle='#94a3b8';g.font='10px Nunito';g.textAlign='right';
-    g.fillText(Math.round(maxY-maxY/5*i)+'ms',pad.l-6,y+4);
-  }
-  const xFn=i=>pad.l+(i/(n-1))*cW;
-  const yFn=v=>pad.t+cH-(Math.min(v,maxY)/maxY)*cH;
-  // Lines
-  datasets.forEach(({data,color,label})=>{
-    g.beginPath();g.strokeStyle=color;g.lineWidth=3;
-    g.shadowBlur=12;g.shadowColor=color+'88';
-    data.forEach((v,i)=>i===0?g.moveTo(xFn(i),yFn(v)):g.lineTo(xFn(i),yFn(v)));
-    g.stroke();g.shadowBlur=0;
-    data.forEach((v,i)=>{
-      g.beginPath();g.arc(xFn(i),yFn(v),5,0,Math.PI*2);
-      g.fillStyle=color;g.fill();
-      g.strokeStyle='#fff';g.lineWidth=2;g.stroke();
-    });
-  });
-  // X labels
-  labels.forEach((l,i)=>{
-    g.fillStyle='#94a3b8';g.font='10px Nunito';g.textAlign='center';
-    g.fillText(l,xFn(i),H-pad.b+16);
-  });
-  g.fillStyle='#64748b';g.font='11px Nunito';g.textAlign='center';
-  g.fillText(xLabel,W/2,H);
-}
-
-function drawBarChart(canvasId,labels,datasets,grouped=false){
-  const r=setupC(canvasId);if(!r)return;
-  const{g,W,H}=r;
-  const pad={t:24,r:24,b:80,l:56};
-  const cW=W-pad.l-pad.r,cH=H-pad.t-pad.b;
-  const n=labels.length;
+function drawBar(id,labels,datasets,grouped){
+  const r=setupC(id);if(!r)return;const{g,W,H}=r;const pad={t:20,r:20,b:72,l:52},cW=W-pad.l-pad.r,cH=H-pad.t-pad.b,n=labels.length;
   const maxY=Math.max(...datasets.flatMap(d=>d.data))*1.15;
-  // Grid
-  for(let i=0;i<=5;i++){
-    const y=pad.t+cH/5*i;
-    g.strokeStyle='#ede8f5';g.lineWidth=1;
-    g.beginPath();g.moveTo(pad.l,y);g.lineTo(W-pad.r,y);g.stroke();
-    g.fillStyle='#94a3b8';g.font='10px Nunito';g.textAlign='right';
-    g.fillText(Math.round(maxY-maxY/5*i),pad.l-6,y+4);
-  }
-  const grpW=cW/n;
-  const nD=datasets.length;
-  const bW=grouped?Math.min(grpW/nD-4,36):Math.min(grpW*0.6,60);
+  for(let i=0;i<=5;i++){const y=pad.t+cH/5*i;g.strokeStyle='#ede8f5';g.lineWidth=1;g.beginPath();g.moveTo(pad.l,y);g.lineTo(W-pad.r,y);g.stroke();g.fillStyle='#94a3b8';g.font='10px Nunito';g.textAlign='right';g.fillText(Math.round(maxY-maxY/5*i),pad.l-5,y+4);}
+  const grpW=cW/n,nD=datasets.length,bW=grouped?Math.min(grpW/nD-4,32):Math.min(grpW*0.55,55);
   labels.forEach((l,i)=>{
     const cx=pad.l+(i+0.5)*grpW;
-    datasets.forEach((ds,j)=>{
-      const x=grouped?cx-(nD/2-j-0.5)*(bW+4)-bW/2:cx-bW/2;
-      const bH=(ds.data[i]/maxY)*cH;
-      const y=pad.t+cH-bH;
-      // Bar with rounded top
-      g.fillStyle=ds.color+'33';g.fillRect(x,y,bW,bH);
-      g.fillStyle=ds.color;
-      g.beginPath();
-      g.roundRect?g.roundRect(x,y,bW,bH,grouped?[6,6,0,0]:[8,8,0,0]):g.rect(x,y,bW,bH);
-      g.fill();
-      // Value label
-      if(!grouped||nD<=2){
-        g.fillStyle=ds.color;g.font='bold 11px Nunito';g.textAlign='center';
-        const val=ds.data[i];
-        g.fillText(val>99?val.toFixed(0):val.toFixed(1),cx,y-6);
-      }
-    });
-    // X label
-    g.save();g.translate(cx,H-pad.b+12);
-    if(n>5){g.rotate(-Math.PI/4);}
-    g.fillStyle='#94a3b8';g.font='10px Nunito';g.textAlign=n>5?'right':'center';
-    g.fillText(l,0,0);g.restore();
+    datasets.forEach((ds,j)=>{const x=grouped?cx-(nD/2-j-0.5)*(bW+4)-bW/2:cx-bW/2,bH=(ds.data[i]/maxY)*cH,y=pad.t+cH-bH;g.fillStyle=ds.color+'33';g.fillRect(x,y,bW,bH);g.fillStyle=ds.color;g.fillRect(x,y+2,bW,bH-2);if(!grouped){g.fillStyle=ds.color;g.font='bold 10px Nunito';g.textAlign='center';g.fillText(ds.data[i].toFixed(1),cx,y-5);}});
+    g.save();g.translate(cx,H-pad.b+10);if(n>6)g.rotate(-Math.PI/4);g.fillStyle='#94a3b8';g.font='10px Nunito';g.textAlign=n>6?'right':'center';g.fillText(l,0,0);g.restore();
   });
-}
-
-function drawAllCharts(){
-  drawLineChart('sizeChart',
-    [{data:B1.hybrid,color:TEAL},{data:B1.distributed,color:ORANGE}],
-    B1.sizes.map(s=>s+''),110,'Dataset Size (documents)');
-
-  drawLineChart('nodesChart',
-    [{data:B2.hybrid,color:TEAL},{data:B2.distributed,color:ORANGE}],
-    B2.nodes.map(n=>n+' nodes'),150,'Number of Nodes');
-
-  drawBarChart('routingChart',B3.labels,
-    [{data:B3.hybrid,color:TEAL},{data:B3.dist,color:ORANGE}],true);
-
-  drawBarChart('throughputChart',Object.keys(B4),
-    [{data:Object.values(B4),color:BLUE}],false);
-
-  buildRawTable();
-  drawTrend();
 }
 
 function drawTrend(){
-  const hist=sys.hist;
-  if(!hist.q.length)return;
-  const r=setupC('trendChart');if(!r)return;
-  const{g,W,H}=r;
-  const pad={t:10,r:20,b:36,l:50};
-  const cW=W-pad.l-pad.r,cH=H-pad.t-pad.b;
-  const all=[...hist.h,...hist.d,...hist.c].filter(v=>v);
-  if(!all.length)return;
-  const maxY=Math.max(...all)*1.2;
-  const n=hist.q.length;
-  for(let i=0;i<=4;i++){
-    const y=pad.t+cH/4*i;
-    g.strokeStyle='#ede8f5';g.lineWidth=1;
-    g.beginPath();g.moveTo(pad.l,y);g.lineTo(W-pad.r,y);g.stroke();
-    g.fillStyle='#94a3b8';g.font='9px Nunito';g.textAlign='right';
-    g.fillText(Math.round(maxY-maxY/4*i)+'ms',pad.l-4,y+3);
-  }
-  const xFn=i=>pad.l+(i/Math.max(n-1,1))*cW;
-  const yFn=v=>pad.t+cH-(v/maxY)*cH;
-  [{data:hist.h,color:TEAL},{data:hist.d,color:ORANGE},{data:hist.c,color:PURPLE}].forEach(({data,color})=>{
-    if(!data.length)return;
-    g.beginPath();g.strokeStyle=color;g.lineWidth=2.5;
-    g.shadowBlur=8;g.shadowColor=color+'66';
-    data.forEach((v,i)=>i===0?g.moveTo(xFn(i),yFn(v)):g.lineTo(xFn(i),yFn(v)));
-    g.stroke();g.shadowBlur=0;
-    data.forEach((v,i)=>{
-      g.beginPath();g.arc(xFn(i),yFn(v),4,0,Math.PI*2);
-      g.fillStyle=color;g.fill();
-    });
-  });
-  hist.q.forEach((l,i)=>{
-    g.fillStyle='#94a3b8';g.font='9px Nunito';g.textAlign='center';
-    g.fillText(l,xFn(i),H-pad.b+12);
-  });
+  const hist=sys.hist;if(!hist.q.length)return;const r=setupC('trendChart');if(!r)return;
+  const{g,W,H}=r;const pad={t:8,r:16,b:28,l:46},cW=W-pad.l-pad.r,cH=H-pad.t-pad.b;
+  const all=[...hist.h,...hist.d,...hist.c].filter(v=>v);if(!all.length)return;
+  const maxY=Math.max(...all)*1.2,n=hist.q.length;
+  for(let i=0;i<=4;i++){const y=pad.t+cH/4*i;g.strokeStyle='#ede8f5';g.lineWidth=1;g.beginPath();g.moveTo(pad.l,y);g.lineTo(W-pad.r,y);g.stroke();g.fillStyle='#94a3b8';g.font='9px Nunito';g.textAlign='right';g.fillText(Math.round(maxY-maxY/4*i)+'ms',pad.l-3,y+3);}
+  const xFn=i=>pad.l+(i/Math.max(n-1,1))*cW,yFn=v=>pad.t+cH-(v/maxY)*cH;
+  [{data:hist.h,color:TEAL},{data:hist.d,color:ORANGE},{data:hist.c,color:PURPLE}].forEach(({data,color})=>{if(!data.length)return;g.beginPath();g.strokeStyle=color;g.lineWidth=2.5;g.shadowBlur=8;g.shadowColor=color+'66';data.forEach((v,i)=>i===0?g.moveTo(xFn(i),yFn(v)):g.lineTo(xFn(i),yFn(v)));g.stroke();g.shadowBlur=0;data.forEach((v,i)=>{g.beginPath();g.arc(xFn(i),yFn(v),4,0,Math.PI*2);g.fillStyle=color;g.fill();});});
+  hist.q.forEach((l,i)=>{g.fillStyle='#94a3b8';g.font='9px Nunito';g.textAlign='center';g.fillText(l,xFn(i),H-pad.b+10);});
 }
 
 function buildRawTable(){
-  const t=document.getElementById('rawTable');
-  if(!t)return;
-  const sizes=[100,200,400,600,800,1000];
-  const h=[26.4,31.7,41.9,51.8,59.9,67.6];
-  const d=[36.7,39.6,48.7,55.5,64.6,71.0];
-  const c=[63.0,214.3,813.4,1813.5,3215.0,5014.3];
-  t.innerHTML=`<thead><tr>
-    <th>Dataset Size</th>
-    <th style="color:${TEAL}">⬡ Hybrid (ms)</th>
-    <th style="color:${ORANGE}">◈ Distributed (ms)</th>
-    <th style="color:${PURPLE}">◎ Centralized (ms)</th>
-    <th>Hybrid vs Dist.</th>
-  </tr></thead><tbody>`+sizes.map((s,i)=>{
-    const save=Math.round((1-h[i]/d[i])*100);
-    return`<tr>
-      <td><strong>${s}</strong> docs</td>
-      <td style="font-family:var(--mono);color:${TEAL};font-weight:700">${h[i]}</td>
-      <td style="font-family:var(--mono);color:${ORANGE};font-weight:700">${d[i]}</td>
-      <td style="font-family:var(--mono);color:${PURPLE};font-weight:700">${c[i]>=1000?(c[i]/1000).toFixed(1)+'s':c[i]}</td>
-      <td><span style="background:#e8fdf7;color:#059669;padding:3px 10px;border-radius:8px;font-size:12px;font-weight:800;">-${save}% faster</span></td>
-    </tr>`;
-  }).join('')+'</tbody>';
+  const t=document.getElementById('rawTable');if(!t)return;
+  const h=[26.4,31.7,41.9,51.8,59.9,67.6],d=[36.7,39.6,48.7,55.5,64.6,71.0],c=[63.0,214.3,813.4,1813.5,3215.0,5014.3];
+  t.innerHTML=`<thead><tr><th>Dataset Size</th><th style="color:${TEAL}">⬡ Hybrid</th><th style="color:${ORANGE}">◈ Distributed</th><th style="color:${PURPLE}">◎ Centralized</th><th>Hybrid vs Dist.</th></tr></thead><tbody>`+
+  [100,200,400,600,800,1000].map((s,i)=>`<tr><td><strong>${s} docs</strong></td><td style="font-family:var(--mono);color:${TEAL}">${h[i]}ms</td><td style="font-family:var(--mono);color:${ORANGE}">${d[i]}ms</td><td style="font-family:var(--mono);color:${PURPLE}">${c[i]>=1000?(c[i]/1000).toFixed(1)+'s':c[i]+'ms'}</td><td><span style="background:#e8fdf7;color:#059669;padding:2px 10px;border-radius:8px;font-size:12px;font-weight:800;">-${Math.round((1-h[i]/d[i])*100)}% faster</span></td></tr>`).join('')+'</tbody>';
 }
 
-// ── Explorer ──────────────────────────────────────────────────────────────────
-let selectedNode=null;
+function drawAllCharts(){
+  drawLine('sizeChart',[{data:B1.hybrid,color:TEAL},{data:B1.distributed,color:ORANGE}],B1.sizes.map(s=>s+''),100);
+  drawLine('nodesChart',[{data:B2.hybrid,color:TEAL},{data:B2.distributed,color:ORANGE}],B2.nodes.map(n=>n+' nodes'),150);
+  drawBar('routingChart',B3.labels,[{data:B3.hybrid,color:TEAL},{data:B3.dist,color:ORANGE}],true);
+  drawBar('throughputChart',Object.keys(B4),[{data:Object.values(B4),color:BLUE}],false);
+  buildRawTable();
+}
+
+function switchBench(id,btn){document.querySelectorAll('.bench-tab').forEach(b=>b.classList.remove('active'));document.querySelectorAll('.bench-content').forEach(c=>c.classList.remove('active'));btn.classList.add('active');document.getElementById('bench-'+id).classList.add('active');setTimeout(drawAllCharts,50);}
+
+let selNode=null;
 function buildExplorer(){
-  const btns=document.getElementById('expNodeBtns');
-  btns.innerHTML=Object.keys(sys.nodes).map(nid=>`
-    <button onclick="selectNode('${nid}')" class="mode-btn ${selectedNode===nid?'sel-hybrid':''}" id="expbtn-${nid}">
-      🖥️ ${nid} <span style="margin-left:auto;font-size:11px;color:#94a3b8;">${len(sys.nodes[nid].docs)} docs</span>
-    </button>`).join('');
-  if(selectedNode)showNodeDocs(selectedNode);
+  document.getElementById('expNodeBtns').innerHTML=Object.keys(sys.nodes).map(nid=>`<button onclick="selectNode('${nid}')" style="padding:9px 14px;border-radius:10px;border:2px solid ${selNode===nid?'var(--teal)':'var(--border)'};background:${selNode===nid?'#e0f7fa':'transparent'};font-family:var(--sans);font-size:13px;font-weight:700;cursor:pointer;text-align:left;display:flex;align-items:center;justify-content:space-between;color:${selNode===nid?'#0891b2':'var(--ink)'};">🖥️ ${nid}<span style="font-size:11px;color:#94a3b8;">${Object.keys(sys.nodes[nid].docs).length} docs</span></button>`).join('');
+  if(selNode)showNodeDocs(selNode);
 }
-function selectNode(nid){
-  selectedNode=nid;
-  document.querySelectorAll('[id^=expbtn-]').forEach(b=>b.className='mode-btn');
-  document.getElementById('expbtn-'+nid).className='mode-btn sel-hybrid';
-  showNodeDocs(nid);
-}
+function selectNode(nid){selNode=nid;buildExplorer();showNodeDocs(nid);}
 function showNodeDocs(nid){
-  const node=sys.nodes[nid];
-  document.getElementById('nodeDocsTitle').textContent=`📄 ${nid} — ${len(node.docs)} documents`;
-  document.getElementById('nodeDocsList').innerHTML=Object.values(node.docs).map(doc=>{
-    const orig=DOCS.find(d=>d.id===doc.doc_id||d.id===doc.id);
-    const cat=orig?.cat||'unknown';
-    const color=CAT_COLORS[cat]||'#64748b';
-    const bg=CAT_BG[cat]||'#f8f8f8';
-    return`<div class="result-item" style="margin-bottom:8px;">
-      <span class="ri-id" style="color:${color}">${doc.doc_id||doc.id}</span>
-      <span class="ri-content">${doc.content}</span>
-      <span style="background:${bg};color:${color};padding:2px 8px;border-radius:6px;font-size:10px;font-weight:800;flex-shrink:0;">${cat}</span>
-    </div>`;
-  }).join('');
+  const node=sys.nodes[nid];document.getElementById('nodeDocsTitle').textContent=`📄 ${nid} — ${Object.keys(node.docs).length} documents`;
+  document.getElementById('nodeDocsList').innerHTML=Object.values(node.docs).map(doc=>{const orig=DOCS.find(d=>d.id===doc.id);const cat=orig?.cat||'unknown',color=CAT_COLORS[cat]||'#64748b',bg=CAT_BG[cat]||'#f8f8f8';return`<div class="result-item" style="margin-bottom:8px;"><span class="ri-id" style="color:${color}">${doc.id}</span><span class="ri-content">${doc.content}</span><span style="background:${bg};color:${color};padding:2px 8px;border-radius:6px;font-size:10px;font-weight:800;flex-shrink:0;">${cat}</span></div>`;}).join('');
 }
 function lookupTerm(){
-  const term=document.getElementById('termInput').value.trim().toLowerCase();
-  const out=document.getElementById('termResult');
+  const term=document.getElementById('termInput').value.trim().toLowerCase(),out=document.getElementById('termResult');
   if(!term){out.innerHTML='';return;}
-  const found={};
-  for(const[nid,node]of Object.entries(sys.nodes)){
-    if(node.inv[term])found[nid]=node.inv[term];
-  }
-  if(Object.keys(found).length){
-    out.innerHTML=`<div style="color:#059669;font-weight:800;margin-bottom:8px;">✓ Found in ${Object.keys(found).length} node(s):</div>`+
-      Object.entries(found).map(([nid,ids])=>
-        `<div style="background:#f0fdf9;border-radius:8px;padding:8px 12px;margin-bottom:6px;border:1.5px solid #a7f3d0;">
-          <span style="font-family:var(--mono);font-size:12px;color:#059669;font-weight:600;">${nid}</span>
-          <span style="color:#94a3b8;font-size:12px;margin-left:8px;">${ids.join(', ')}</span>
-        </div>`).join('');
-  } else {
-    out.innerHTML=`<div style="color:#dc2626;font-weight:700;">✗ Term "${term}" not found in any node.</div>`;
-  }
+  const found={};for(const[nid,node]of Object.entries(sys.nodes))if(node.inv[term])found[nid]=node.inv[term];
+  out.innerHTML=Object.keys(found).length?`<div style="color:#059669;font-weight:800;margin-bottom:8px;">✓ Found in ${Object.keys(found).length} node(s)</div>`+Object.entries(found).map(([nid,ids])=>`<div style="background:#f0fdf9;border-radius:8px;padding:8px 12px;margin-bottom:6px;border:1.5px solid #a7f3d0;"><span style="font-family:var(--mono);font-size:12px;color:#059669;font-weight:600;">${nid}</span><span style="color:#94a3b8;font-size:12px;margin-left:8px;">${ids.join(', ')}</span></div>`).join(''):`<div style="color:#dc2626;font-weight:700;">✗ "${term}" not found.</div>`;
 }
 
-// ── Init ──────────────────────────────────────────────────────────────────────
 renderNodes([]);
-window.addEventListener('resize',()=>drawAllCharts());
+window.addEventListener('resize',()=>{drawAllCharts();drawTrend();});
 </script>
 </body>
 </html>
